@@ -56,7 +56,7 @@
         .home-btn { margin-top: 20px; background-color: #6c757d; }
 
         /* List jadwal */
-        .timeline { list-style: none; padding: 0; margin-top: 20px; }
+        .timeline { list-style: none; padding: 0; margin-top: 10px; }
         .timeline li { 
             display: flex; 
             margin-bottom: 15px; 
@@ -65,6 +65,17 @@
         }
         .time { font-weight: bold; color: #007bff; width: 60px; flex-shrink: 0; }
         .activity { color: #444; }
+        
+        /* Gaya untuk jam realtime */
+        .clock {
+            text-align: center;
+            font-size: 28px;
+            font-weight: bold;
+            color: #d9534f; /* Warna merah agar mencolok */
+            margin-top: 5px;
+            margin-bottom: 15px;
+            font-family: 'Courier New', Courier, monospace; /* Font ala jam digital */
+        }
     </style>
 </head>
 <body>
@@ -81,16 +92,20 @@
         <button class="nav-btn home-btn" onclick="window.location.href='index.html'">Kembali ke Menu Utama</button>
     </div>
 
-    <!-- Tampilan 2: Detail Jadwal (Disembunyikan dari awal) -->
+    <!-- Tampilan 2: Detail Jadwal -->
     <div id="view-schedule" class="container" style="display: none;">
         <button class="nav-btn" onclick="showDates()">⬅ Kembali Pilih Tanggal</button>
+        
         <h2 id="title-date">Tanggal</h2>
-        <h3 id="title-day" style="text-align:center; color:#666; margin-top:-10px;">Day</h3>
+        <h3 id="title-day" style="text-align:center; color:#666; margin-top:-10px; margin-bottom: 5px;">Day</h3>
+        
+        <!-- Wadah Jam Realtime -->
+        <div class="clock" id="realtime-clock">00:00:00</div>
+        
         <ul class="timeline" id="schedule-list"></ul>
     </div>
 
     <script>
-        // Data jadwal kegiatan. Silakan edit jam dan teksnya di sini.
         const scheduleData = {
             26: {
                 date: "26-Sep-2026",
@@ -152,6 +167,24 @@
             document.getElementById('view-dates').style.display = 'block';
             document.getElementById('view-schedule').style.display = 'none';
         }
+
+        // Fungsi untuk mengupdate jam realtime
+        function updateClock() {
+            const now = new Date();
+            
+            // padStart digunakan untuk menambah angka '0' di depan jika angkanya cuma 1 digit (misal jam 9 jadi 09)
+            const hours = String(now.getHours()).padStart(2, '0');
+            const minutes = String(now.getMinutes()).padStart(2, '0');
+            const seconds = String(now.getSeconds()).padStart(2, '0');
+            
+            document.getElementById('realtime-clock').innerText = `${hours}:${minutes}:${seconds}`;
+        }
+
+        // Jalankan fungsi updateClock setiap 1000 milidetik (1 detik)
+        setInterval(updateClock, 1000);
+        
+        // Panggil fungsinya sekali saat web pertama dimuat agar tidak nunggu 1 detik dulu
+        updateClock();
     </script>
 </body>
 </html>

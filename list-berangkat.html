@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>List Berangkat - Trip to Jogja</title>
+    <style>
+        body { 
+            font-family: Arial, sans-serif; 
+            background-image: url('jogja.jpg');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            margin: 0; 
+            padding: 20px; 
+            display: flex; 
+            justify-content: center; 
+            align-items: center;
+            min-height: 100vh;
+            box-sizing: border-box;
+        }
+        .container { 
+            background: rgba(255, 255, 255, 0.95); 
+            padding: 20px; 
+            border-radius: 12px; 
+            width: 100%; 
+            max-width: 350px; 
+            box-shadow: 0 8px 20px rgba(0,0,0,0.4); 
+            display: flex;
+            flex-direction: column;
+        }
+        h2 { text-align: center; color: #222; margin-top: 0; margin-bottom: 20px; }
+        
+        .nav-btn { 
+            background-color: #6c757d; 
+            color: white; 
+            border: none; 
+            padding: 12px; 
+            border-radius: 5px; 
+            cursor: pointer; 
+            width: 100%; 
+            font-size: 16px; 
+            margin-bottom: 20px; 
+        }
+
+        .check-list { list-style: none; padding: 0; margin: 0; }
+        .check-item {
+            display: flex;
+            align-items: center;
+            padding: 15px 10px;
+            border-bottom: 1px solid #ddd;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+        .check-item:hover { background-color: #f9f9f9; }
+        .check-item:last-child { border-bottom: none; }
+        
+        .check-item input[type="checkbox"] {
+            transform: scale(1.5);
+            margin-right: 15px;
+            cursor: pointer;
+        }
+        .check-text { font-size: 16px; color: #333; transition: all 0.2s; font-weight: bold; }
+        .done .check-text { text-decoration: line-through; color: #aaa; font-weight: normal; }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <button class="nav-btn" onclick="window.location.href='index.html'">⬅ Kembali ke Menu Utama</button>
+        <h2>Check List Berangkat 🛫</h2>
+        <ul class="check-list" id="berangkat-list"></ul>
+    </div>
+
+    <script>
+        const itemBerangkat = [
+            "KTP, SIM & BPJS Terbawa",
+            "Dompet & Uang Cash Aman",
+            "Tiket / Bukti Pesanan Siap",
+            "Koper & Tas Masuk Kendaraan",
+            "HP & Powerbank Full Charge",
+            "Listrik, Air & Gas Rumah Dimatikan",
+            "Jendela & Pintu Rumah Terkunci"
+        ];
+
+        const storageKey = 'jogjaListBerangkat';
+        let savedData = JSON.parse(localStorage.getItem(storageKey)) || [];
+
+        function renderList() {
+            const listEl = document.getElementById('berangkat-list');
+            listEl.innerHTML = '';
+
+            itemBerangkat.forEach((item, index) => {
+                const isChecked = savedData.includes(index);
+                const li = document.createElement('li');
+                li.className = `check-item ${isChecked ? 'done' : ''}`;
+                // Klik di seluruh baris bisa mencentang checkbox
+                li.onclick = (e) => {
+                    // Mencegah double trigger jika yang diklik tepat di kotak checkboxnya
+                    if (e.target.tagName !== 'INPUT') toggleCheck(index);
+                };
+
+                li.innerHTML = `
+                    <input type="checkbox" onchange="toggleCheck(${index})" ${isChecked ? 'checked' : ''}>
+                    <span class="check-text">${item}</span>
+                `;
+                listEl.appendChild(li);
+            });
+        }
+
+        function toggleCheck(index) {
+            if (savedData.includes(index)) {
+                savedData = savedData.filter(i => i !== index); // Hapus centang
+            } else {
+                savedData.push(index); // Tambah centang
+            }
+            localStorage.setItem(storageKey, JSON.stringify(savedData));
+            renderList();
+        }
+
+        renderList();
+    </script>
+</body>
+</html>

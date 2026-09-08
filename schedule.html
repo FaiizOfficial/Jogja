@@ -121,8 +121,7 @@
     <div id="view-schedule" class="container" style="display: none;">
         <button class="nav-btn" onclick="showDates()">⬅ Kembali Pilih Tanggal</button>
         
-        <h2 id="title-date" style="margin-bottom: 5px;">Tanggal</h2>
-        <h3 id="title-day" style="text-align:center; color:#555; margin-top:0; margin-bottom: 5px;">Day</h3>
+        <h2 id="title-date" style="margin-bottom: 5px;"></h2>
         
         <!-- Wadah Jam Realtime -->
         <div class="clock" id="realtime-clock">00:00:00</div>
@@ -135,8 +134,7 @@
     <script>
         const scheduleData = {
             26: {
-                date: "26-Sep-2026",
-                day: "Day One",
+                date: "26-September-2026",
                 events: [
                     { time: "05:00 - 06:00", act: "OTW STASIUN SENEN" },
                     { time: "07:55 - 15:00", act: "OTW TANGERANG - JOGJA" },
@@ -149,8 +147,7 @@
                 ]
             },
             27: {
-                date: "27-Sep-2026",
-                day: "Day Two",
+                date: "27-September-2026",
                 events: [
                     { time: "07:00 - 08:00", act: "MANDI DI VILLA" },
                     { time: "08:00 - 09:00", act: "SARAPAN DEKAT VILLA" },
@@ -173,8 +170,7 @@
                 ]
             },
             28: {
-                date: "28-Sep-2026",
-                day: "Day Three",
+                date: "28-September-2026",
                 events: [
                     { time: "07:00 - 08:00", act: "MANDI DI VILLA" },
                     { time: "08:00 - 08:40", act: "SARAPAN DEKAT VILLA" },
@@ -194,8 +190,7 @@
                 ]
             },
             29: {
-                date: "29-Sep-2026",
-                day: "Day Four",
+                date: "29-September-2026",
                 events: [
                     { time: "07:00 - 08:00", act: "MANDI DI VILLA" },
                     { time: "08:00 - 09:00", act: "MAKAN DI VILLA" },
@@ -214,13 +209,14 @@
         };
 
         function showSchedule(dateKey) {
-            document.getElementById('title-date').innerText = data.date;
+            // Sembunyikan grid tanggal, tampilkan detail jadwal
+            document.getElementById('view-dates').style.display = 'none';
             document.getElementById('view-schedule').style.display = 'flex';
 
             const data = scheduleData[dateKey];
             
-            document.getElementById('title-date').innerText = `Tanggal ${data.date}`;
-            document.getElementById('title-day').innerText = data.day;
+            // Masukkan tanggal bersih (misal: 26-September-2026)
+            document.getElementById('title-date').innerText = data.date;
 
             const listElement = document.getElementById('schedule-list');
             listElement.innerHTML = ''; 

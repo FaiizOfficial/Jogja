@@ -7,94 +7,195 @@
     <style>
         body { 
             font-family: Arial, sans-serif; 
-            background-color: #f4f4f9; 
+            background-image: url('jogja.jpg');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
             margin: 0; 
             padding: 20px; 
             display: flex; 
             justify-content: center; 
+            align-items: center;
+            min-height: 100vh;
+            box-sizing: border-box;
         }
         .container { 
-            background: white; 
+            background: rgba(255, 255, 255, 0.95); 
             padding: 20px; 
-            border-radius: 10px; 
+            border-radius: 12px; 
             width: 100%; 
-            max-width: 320px; 
-            box-shadow: 0 4px 8px rgba(0,0,0,0.1); 
+            max-width: 350px; 
+            box-shadow: 0 8px 20px rgba(0,0,0,0.4); 
+            max-height: 90vh;
+            display: flex;
+            flex-direction: column;
         }
-        h2 { text-align: center; color: #333; margin-top: 0; }
+        h2 { text-align: center; color: #222; margin-top: 0; }
         
-        /* Gaya untuk Header Tanggal */
-        .day-header {
-            margin-top: 25px;
-            margin-bottom: 15px;
-            border-bottom: 2px solid #eee;
-            padding-bottom: 5px;
+        /* Grid untuk tombol tanggal (4 hari) */
+        .grid-container { 
+            display: grid; 
+            grid-template-columns: 1fr 1fr; 
+            gap: 12px; 
+            margin-top: 20px; 
         }
-        .day-header h3 { margin: 0; color: #333; font-size: 16px;}
-        .day-header p { margin: 2px 0 0 0; color: #777; font-size: 14px; }
+        .date-btn { 
+            background-color: #fff; 
+            border: 2px solid #333; 
+            border-radius: 10px; 
+            padding: 20px 0; 
+            font-size: 20px; 
+            font-weight: bold; 
+            cursor: pointer; 
+            box-shadow: 2px 2px 5px rgba(0,0,0,0.2); 
+            transition: background-color 0.2s;
+        }
+        .date-btn:hover { background-color: #f0f0f0; }
         
+        /* Tombol navigasi */
+        .nav-btn { 
+            background-color: #333; 
+            color: white; 
+            border: none; 
+            padding: 10px; 
+            border-radius: 5px; 
+            cursor: pointer; 
+            width: 100%; 
+            font-size: 16px; 
+            margin-bottom: 15px; 
+            flex-shrink: 0;
+        }
+        .home-btn { margin-top: 20px; background-color: #6c757d; }
+
+        /* Area list rute yang bisa di-scroll */
+        .route-scroll {
+            overflow-y: auto;
+            flex-grow: 1;
+            margin-top: 10px;
+            padding-right: 5px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
         /* Gaya untuk tombol rute Maps */
         .route-link {
-            display: block;
-            background-color: #fff;
+            display: flex;
+            align-items: center;
+            background-color: #f8f9fa;
             border: 1px solid #ddd;
-            border-left: 4px solid #007bff; /* Garis biru di sebelah kiri biar mirip aplikasi rute */
+            border-left: 5px solid #007bff; /* Garis biru ala penunjuk jalan */
             border-radius: 6px;
             padding: 12px;
-            margin-bottom: 10px;
             text-decoration: none;
             color: #333;
             font-size: 13px;
             font-weight: bold;
             box-shadow: 1px 1px 4px rgba(0,0,0,0.05);
-            transition: background-color 0.2s;
+            transition: background-color 0.2s, transform 0.1s;
         }
         .route-link:hover {
-            background-color: #f0f8ff;
+            background-color: #e2e6ea;
+            transform: scale(1.02);
         }
-        
-        /* Tombol navigasi */
-        .home-btn { 
-            background-color: #6c757d; 
-            color: white; 
-            border: none; 
-            padding: 12px; 
-            border-radius: 5px; 
-            cursor: pointer; 
-            width: 100%; 
-            font-size: 16px; 
-            margin-top: 20px;
+        .route-icon {
+            font-size: 18px;
+            margin-right: 10px;
         }
+
     </style>
 </head>
 <body>
 
-    <div class="container">
+    <!-- Tampilan 1: Pilih Tanggal -->
+    <div id="view-dates" class="container">
         <h2>Peta & Rute 📍</h2>
-
-        <!-- Day 1 -->
-        <div class="day-header">
-            <h3>Tanggal 26-Sep-2026</h3>
-            <p>Day one</p>
+        <div class="grid-container">
+            <button class="date-btn" onclick="showRoutes(26)">26 Sep</button>
+            <button class="date-btn" onclick="showRoutes(27)">27 Sep</button>
+            <button class="date-btn" onclick="showRoutes(28)">28 Sep</button>
+            <button class="date-btn" onclick="showRoutes(29)">29 Sep</button>
         </div>
-        
-        <!-- target="_blank" digunakan agar maps terbuka di tab/aplikasi baru -->
-        <a href="https://www.google.com/maps/dir/?api=1&origin=Stasiun+Pasar+Senen,+Jakarta&destination=Stasiun+Lempuyangan,+Yogyakarta" target="_blank" class="route-link">
-            STASIUN SENEN - STASIUN LEMPUYANGAN
-        </a>
-        
-        <a href="https://www.google.com/maps/dir/Lempuyangan,+Jln.+Lempuyangan+No.1+RT+01%2FRW+01,+Bausasran,+Kec.+Danurejan,+Kota+Yogyakarta,+Daerah+Istimewa+Yogyakarta/Casa+De+Kayana,+Jl.+Candi+Winangun,+Candi+Winangun,+Sardonoharjo,+Ngaglik,+Sleman+Regency,+Special+Region+of+Yogyakarta+55581/@-7.7624749,110.4010942,13z/data=!4m14!4m13!1m5!1m1!1s0x2e7a582c7e459e7b:0x5701c5404fb7a847!2m2!1d110.3753052!2d-7.790133!1m5!1m1!1s0x2e7a5ff515647429:0x8baa86a35c538624!2m2!1d110.4101041!2d-7.6950145!3e0?entry=ttu&g_ep=EgoyMDI2MDkwMi4wIKXMDSoASAFQAw%3D%3D" target="_blank" class="route-link">
-            STASIUN LEMPUYANGAN - VILLA
-        </a>
-        
-        <a href="https://www.google.com/maps/dir/?api=1&origin=Villa+Yogyakarta&destination=Jalan+Malioboro,+Yogyakarta" target="_blank" class="route-link">
-            VILLA - MALIOBORO
-        </a>
-
-        <!-- Lu bisa copy-paste blok div "day-header" dan tag <a> di atas untuk menambah Day 2, Day 3, dst -->
-
-        <button class="home-btn" onclick="window.location.href='index.html'">Kembali ke Menu Utama</button>
+        <button class="nav-btn home-btn" onclick="window.location.href='index.html'">Kembali ke Menu Utama</button>
     </div>
 
+    <!-- Tampilan 2: Detail Rute -->
+    <div id="view-routes" class="container" style="display: none;">
+        <button class="nav-btn" onclick="showDates()">⬅ Kembali Pilih Tanggal</button>
+        
+        <h2 id="title-date" style="margin-bottom: 15px; font-size: 20px;"></h2>
+        
+        <!-- Wadah List Rute -->
+        <div class="route-scroll" id="route-list"></div>
+    </div>
+
+    <script>
+        // Data rute Google Maps berdasarkan jadwal Excel lu
+        const routeData = {
+            26: {
+                date: "26-September-2026",
+                routes: [
+                    { name: "TANGERANG - STASIUN SENEN", url: "https://www.google.com/maps/dir/?api=1&origin=Tangerang&destination=Stasiun+Pasar+Senen" },
+                    { name: "STASIUN JOGJA - VILLA", url: "https://www.google.com/maps/dir/?api=1&origin=Stasiun+Yogyakarta&destination=Villa+Yogyakarta" }
+                ]
+            },
+            27: {
+                date: "27-September-2026",
+                routes: [
+                    { name: "VILLA - CANDI PRAMBANAN", url: "https://www.google.com/maps/dir/?api=1&origin=Villa+Yogyakarta&destination=Candi+Prambanan" },
+                    { name: "CANDI PRAMBANAN - KEDATHON", url: "https://www.google.com/maps/dir/?api=1&origin=Candi+Prambanan&destination=Kedathon+Yogyakarta" },
+                    { name: "KEDATHON - TAMAN SARI", url: "https://www.google.com/maps/dir/?api=1&origin=Kedathon+Yogyakarta&destination=Taman+Sari+Yogyakarta" },
+                    { name: "TAMAN SARI - MUSEUM VREDEBURG", url: "https://www.google.com/maps/dir/?api=1&origin=Taman+Sari+Yogyakarta&destination=Museum+Vredeburg" },
+                    { name: "MUSEUM VREDEBURG - TUGU JOGJA", url: "https://www.google.com/maps/dir/?api=1&origin=Museum+Vredeburg&destination=Tugu+Jogja" },
+                    { name: "TUGU JOGJA - MALIOBORO", url: "https://www.google.com/maps/dir/?api=1&origin=Tugu+Jogja&destination=Jalan+Malioboro" },
+                    { name: "MALIOBORO - VILLA", url: "https://www.google.com/maps/dir/?api=1&origin=Jalan+Malioboro&destination=Villa+Yogyakarta" }
+                ]
+            },
+            28: {
+                date: "28-September-2026",
+                routes: [
+                    { name: "VILLA - MALIOBORO", url: "https://www.google.com/maps/dir/?api=1&origin=Villa+Yogyakarta&destination=Jalan+Malioboro" },
+                    { name: "MALIOBORO - PASAR BERINGHARJO", url: "https://www.google.com/maps/dir/?api=1&origin=Jalan+Malioboro&destination=Pasar+Beringharjo" },
+                    { name: "PASAR BERINGHARJO - ALUN ALUN", url: "https://www.google.com/maps/dir/?api=1&origin=Pasar+Beringharjo&destination=Alun+Alun+Kidul+Yogyakarta" },
+                    { name: "ALUN ALUN - VILLA", url: "https://www.google.com/maps/dir/?api=1&origin=Alun+Alun+Kidul+Yogyakarta&destination=Villa+Yogyakarta" }
+                ]
+            },
+            29: {
+                date: "29-September-2026",
+                routes: [
+                    { name: "VILLA - STASIUN JOGJA", url: "https://www.google.com/maps/dir/?api=1&origin=Villa+Yogyakarta&destination=Stasiun+Yogyakarta" },
+                    { name: "STASIUN JOGJA - KLATEN", url: "https://www.google.com/maps/dir/?api=1&origin=Stasiun+Yogyakarta&destination=Klaten" },
+                    { name: "KLATEN - DELANGGU", url: "https://www.google.com/maps/dir/?api=1&origin=Klaten&destination=Delanggu" }
+                ]
+            }
+        };
+
+        function showRoutes(dateKey) {
+            document.getElementById('view-dates').style.display = 'none';
+            document.getElementById('view-routes').style.display = 'flex';
+
+            const data = routeData[dateKey];
+            document.getElementById('title-date').innerText = data.date;
+
+            const listElement = document.getElementById('route-list');
+            listElement.innerHTML = ''; 
+            
+            data.routes.forEach(item => {
+                const a = document.createElement('a');
+                a.href = item.url;
+                a.target = "_blank"; // Membuka di tab/aplikasi baru
+                a.className = "route-link";
+                a.innerHTML = `<span class="route-icon">🗺️</span> <span>${item.name}</span>`;
+                
+                listElement.appendChild(a);
+            });
+        }
+
+        function showDates() {
+            document.getElementById('view-dates').style.display = 'flex';
+            document.getElementById('view-routes').style.display = 'none';
+        }
+    </script>
 </body>
 </html>

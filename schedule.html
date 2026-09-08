@@ -33,7 +33,7 @@
         }
         h2 { text-align: center; color: #222; margin-top: 0; }
         
-        /* Grid untuk tombol tanggal (5 hari: 25 s.d. 29) */
+        /* Grid untuk tombol tanggal (4 hari: 26 s.d. 29) */
         .grid-container { 
             display: grid; 
             grid-template-columns: 1fr 1fr; 
@@ -109,11 +109,10 @@
     <div id="view-dates" class="container">
         <h2>Pilih Tanggal</h2>
         <div class="grid-container">
-            <button class="date-btn" onclick="showSchedule(25)">25 Sep</button>
             <button class="date-btn" onclick="showSchedule(26)">26 Sep</button>
             <button class="date-btn" onclick="showSchedule(27)">27 Sep</button>
             <button class="date-btn" onclick="showSchedule(28)">28 Sep</button>
-            <button class="date-btn" onclick="showSchedule(29)" style="grid-column: span 2;">29 Sep</button>
+            <button class="date-btn" onclick="showSchedule(29)">29 Sep</button>
         </div>
         <button class="nav-btn home-btn" onclick="window.location.href='index.html'">Kembali ke Menu Utama</button>
     </div>
@@ -135,21 +134,16 @@
 
     <script>
         const scheduleData = {
-            25: {
-                date: "25-Sep-2026",
-                day: "Day Preparation / OTW",
-                events: [
-                    { time: "04:30 - 15:00", act: "OTW TANGERANG - JOGJA" }
-                ]
-            },
             26: {
                 date: "26-Sep-2026",
                 day: "Day One",
                 events: [
+                    { time: "05:00 - 06:00", act: "OTW STASIUN SENEN" },
+                    { time: "07:55 - 15:00", act: "OTW TANGERANG - JOGJA" },
                     { time: "15:00 - 15:40", act: "OTW KE VILLA" },
                     { time: "15:40 - 15:50", act: "CHECK IN DI VILLA" },
-                    { time: "15:50 - 16:40", act: "RENTAL MOTOR (COD DI VILLA)" },
-                    { time: "16:40 - 18:00", act: "ISTIRAHAT DI VILLA (MANDI)" },
+                    { time: "15:50 - 16:40", act: "RENTAL MOTOR ( COD DI VILLA )" },
+                    { time: "16:40 - 18:00", act: "ISTIRAHAT DI VILLA ( MANDI )" },
                     { time: "18:00 - 19:00", act: "MAKAN MALAM" },
                     { time: "19:00 - 07:00", act: "ISTIRAHAT BOBO DI VILLA" }
                 ]
@@ -183,13 +177,15 @@
                 day: "Day Three",
                 events: [
                     { time: "07:00 - 08:00", act: "MANDI DI VILLA" },
-                    { time: "08:00 - 09:00", act: "SARAPAN DEKAT VILLA" },
-                    { time: "09:00 - 11:00", act: "RENANG DI VILLA DAN ISTIRAHAT" },
-                    { time: "11:00 - 11:30", act: "MAKAN DEKET VILLA" },
-                    { time: "11:30 - 12:00", act: "OPSIONAL (NONGS / ISTIRAHAT)" },
-                    { time: "12:00 - 13:00", act: "OTW MALIOBORO FOTO SHOOT" },
-                    { time: "13:00 - 15:30", act: "FOTO SHOOT (MALIOBORO)" },
-                    { time: "15:30 - 17:00", act: "CARI OLEH-OLEH" },
+                    { time: "08:00 - 08:40", act: "SARAPAN DEKAT VILLA" },
+                    { time: "08:40 - 09:10", act: "OTW MALIOBORO" },
+                    { time: "09:10 - 09:30", act: "PRIPER FOTO SHOOT" },
+                    { time: "09:30 - 10:30", act: "FOTO SHOOT (MALIOBORO)" },
+                    { time: "10:30 - 10:50", act: "SELESAI FOTO SHOOT" },
+                    { time: "10:50 - 11:50", act: "CARI MAKAN DEKET MALIOBORO" },
+                    { time: "11:50 - 13:00", act: "CARI OLEH-OLEH" },
+                    { time: "13:00 - 15:30", act: "KULINERAN DI MALIOBORO" },
+                    { time: "15:30 - 17:00", act: "PASAR NGASEM / PASAR BERINGHARJO" },
                     { time: "17:00 - 18:00", act: "REFRESHING JALAN JALAN SANTAI" },
                     { time: "18:00 - 19:00", act: "MAKAN MALAM" },
                     { time: "19:00 - 20:00", act: "MALIOBORO / ALUN ALUN JOGJA" },
@@ -203,11 +199,16 @@
                 events: [
                     { time: "07:00 - 08:00", act: "MANDI DI VILLA" },
                     { time: "08:00 - 09:00", act: "MAKAN DI VILLA" },
-                    { time: "09:00 - 11:00", act: "PREPARE CHECK OUT VILLA" },
+                    { time: "09:00 - 11:00", act: "PRIPER CHECK OUT VILLA" },
                     { time: "11:00 - 11:10", act: "CEK OUT VILLA" },
-                    { time: "11:10 - 13:30", act: "OTW KLATEN" },
-                    { time: "13:30 - 17:00", act: "MAKAN & BELI OLEH-OLEH KLATEN" },
-                    { time: "17:00 - 07:00", act: "OTW KLATEN - TANGERANG" }
+                    { time: "11:00 - 11:10", act: "OTW STASIUN JOGJA" },
+                    { time: "11:10 - 12:20", act: "OTW JOGJA - KLATEN" },
+                    { time: "12:20 - 12:40", act: "OTW RUMAH MBAH" },
+                    { time: "12:40 - 13:20", act: "MAKAN - NGOBROL DIRUMAH MBAH" },
+                    { time: "13:20 - 15:00", act: "JALAN-JALAN DI KLATEN" },
+                    { time: "15:00 - 16:00", act: "PRIPER PULANG" },
+                    { time: "16:00 - 16:20", act: "OTW KE DELANGGU" },
+                    { time: "16:20 - 07:00", act: "OTW KLATEN - TANGERANG" }
                 ]
             }
         };

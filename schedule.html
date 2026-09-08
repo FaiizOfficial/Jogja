@@ -214,7 +214,7 @@
         };
 
         function showSchedule(dateKey) {
-            document.getElementById('view-dates').style.display = 'none';
+            document.getElementById('title-date').innerText = data.date;
             document.getElementById('view-schedule').style.display = 'flex';
 
             const data = scheduleData[dateKey];

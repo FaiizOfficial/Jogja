@@ -21,28 +21,31 @@
             box-sizing: border-box;
         }
         .container { 
-            background: rgba(255, 255, 255, 0.95); /* Putih solid dengan sedikit transparansi */
+            background: rgba(255, 255, 255, 0.95); 
             padding: 20px; 
             border-radius: 12px; 
             width: 100%; 
-            max-width: 320px; 
-            box-shadow: 0 8px 20px rgba(0,0,0,0.4); /* Bayangan tegas agar kotak terpisah dari foto */
+            max-width: 350px; 
+            box-shadow: 0 8px 20px rgba(0,0,0,0.4); 
+            max-height: 90vh;
+            display: flex;
+            flex-direction: column;
         }
         h2 { text-align: center; color: #222; margin-top: 0; }
         
-        /* Grid untuk tombol tanggal */
+        /* Grid untuk tombol tanggal (5 hari: 25 s.d. 29) */
         .grid-container { 
             display: grid; 
             grid-template-columns: 1fr 1fr; 
-            gap: 15px; 
+            gap: 12px; 
             margin-top: 20px; 
         }
         .date-btn { 
             background-color: #fff; 
             border: 2px solid #333; 
             border-radius: 10px; 
-            padding: 25px 0; 
-            font-size: 24px; 
+            padding: 20px 0; 
+            font-size: 20px; 
             font-weight: bold; 
             cursor: pointer; 
             box-shadow: 2px 2px 5px rgba(0,0,0,0.2); 
@@ -63,29 +66,40 @@
             width: 100%; 
             font-size: 16px; 
             margin-bottom: 15px; 
+            flex-shrink: 0;
         }
         .home-btn { margin-top: 20px; background-color: #6c757d; }
 
+        /* Area list jadwal yang bisa di-scroll jika panjang */
+        .schedule-scroll {
+            overflow-y: auto;
+            flex-grow: 1;
+            margin-top: 10px;
+            padding-right: 5px;
+        }
+
         /* List jadwal */
-        .timeline { list-style: none; padding: 0; margin-top: 10px; }
+        .timeline { list-style: none; padding: 0; margin: 0; }
         .timeline li { 
             display: flex; 
-            margin-bottom: 15px; 
+            flex-direction: column;
+            margin-bottom: 12px; 
             border-bottom: 1px solid #ddd; 
-            padding-bottom: 10px; 
+            padding-bottom: 8px; 
         }
-        .time { font-weight: bold; color: #0056b3; width: 60px; flex-shrink: 0; }
-        .activity { color: #333; }
+        .time { font-weight: bold; color: #0056b3; font-size: 13px; margin-bottom: 2px; }
+        .activity { color: #333; font-size: 14px; }
         
         /* Gaya untuk jam realtime */
         .clock {
             text-align: center;
-            font-size: 28px;
+            font-size: 24px;
             font-weight: bold;
             color: #d9534f;
             margin-top: 5px;
-            margin-bottom: 15px;
+            margin-bottom: 10px;
             font-family: 'Courier New', Courier, monospace;
+            flex-shrink: 0;
         }
     </style>
 </head>
@@ -95,10 +109,11 @@
     <div id="view-dates" class="container">
         <h2>Pilih Tanggal</h2>
         <div class="grid-container">
-            <button class="date-btn" onclick="showSchedule(26)">26</button>
-            <button class="date-btn" onclick="showSchedule(27)">27</button>
-            <button class="date-btn" onclick="showSchedule(28)">28</button>
-            <button class="date-btn" onclick="showSchedule(29)">29</button>
+            <button class="date-btn" onclick="showSchedule(25)">25 Sep</button>
+            <button class="date-btn" onclick="showSchedule(26)">26 Sep</button>
+            <button class="date-btn" onclick="showSchedule(27)">27 Sep</button>
+            <button class="date-btn" onclick="showSchedule(28)">28 Sep</button>
+            <button class="date-btn" onclick="showSchedule(29)" style="grid-column: span 2;">29 Sep</button>
         </div>
         <button class="nav-btn home-btn" onclick="window.location.href='index.html'">Kembali ke Menu Utama</button>
     </div>
@@ -107,57 +122,99 @@
     <div id="view-schedule" class="container" style="display: none;">
         <button class="nav-btn" onclick="showDates()">⬅ Kembali Pilih Tanggal</button>
         
-        <h2 id="title-date">Tanggal</h2>
-        <h3 id="title-day" style="text-align:center; color:#555; margin-top:-10px; margin-bottom: 5px;">Day</h3>
+        <h2 id="title-date" style="margin-bottom: 5px;">Tanggal</h2>
+        <h3 id="title-day" style="text-align:center; color:#555; margin-top:0; margin-bottom: 5px;">Day</h3>
         
         <!-- Wadah Jam Realtime -->
         <div class="clock" id="realtime-clock">00:00:00</div>
         
-        <ul class="timeline" id="schedule-list"></ul>
+        <div class="schedule-scroll">
+            <ul class="timeline" id="schedule-list"></ul>
+        </div>
     </div>
 
     <script>
         const scheduleData = {
+            25: {
+                date: "25-Sep-2026",
+                day: "Day Preparation / OTW",
+                events: [
+                    { time: "04:30 - 15:00", act: "OTW TANGERANG - JOGJA" }
+                ]
+            },
             26: {
                 date: "26-Sep-2026",
                 day: "Day One",
                 events: [
-                    { time: "08:00", act: "Otw ke bandara/stasiun" },
-                    { time: "09:00", act: "Sampai" },
-                    { time: "09:30", act: "Otw Villa" },
-                    { time: "10:20", act: "Sampai Villa" }
+                    { time: "15:00 - 15:40", act: "OTW KE VILLA" },
+                    { time: "15:40 - 15:50", act: "CHECK IN DI VILLA" },
+                    { time: "15:50 - 16:40", act: "RENTAL MOTOR (COD DI VILLA)" },
+                    { time: "16:40 - 18:00", act: "ISTIRAHAT DI VILLA (MANDI)" },
+                    { time: "18:00 - 19:00", act: "MAKAN MALAM" },
+                    { time: "19:00 - 07:00", act: "ISTIRAHAT BOBO DI VILLA" }
                 ]
             },
             27: {
                 date: "27-Sep-2026",
                 day: "Day Two",
                 events: [
-                    { time: "07:00", act: "Sarapan pagi" },
-                    { time: "08:30", act: "Jalan ke Pantai" },
-                    { time: "12:00", act: "Makan Siang & Istirahat" }
+                    { time: "07:00 - 08:00", act: "MANDI DI VILLA" },
+                    { time: "08:00 - 09:00", act: "SARAPAN DEKAT VILLA" },
+                    { time: "09:00 - 09:30", act: "OTW CANDI PRAMBANAN" },
+                    { time: "09:30 - 11:00", act: "CANDI PRAMBANAN" },
+                    { time: "11:00 - 11:40", act: "MAKAN SIANG DEKET PRAMBANAN" },
+                    { time: "11:40 - 12:20", act: "OTW KEDATHON JOGJA" },
+                    { time: "12:20 - 13:20", act: "KEDATHON JOGJA" },
+                    { time: "13:20 - 14:20", act: "TAMAN SARI" },
+                    { time: "14:20 - 14:30", act: "OTW MUSEUM VREDEBURG" },
+                    { time: "14:30 - 16:00", act: "MUSEUM VREDEBURG" },
+                    { time: "16:00 - 16:15", act: "OTW TUGU JOGJA" },
+                    { time: "16:15 - 17:00", act: "CAFFE TUGU JOGJA" },
+                    { time: "17:00 - 17:20", act: "OTW MALIOBORO" },
+                    { time: "17:20 - 18:00", act: "MALIOBORO" },
+                    { time: "18:00 - 20:00", act: "MAKAN MALAM, KULINER MALIOBORO" },
+                    { time: "20:00 - 20:30", act: "OTW VILLA" },
+                    { time: "20:30 - 21:00", act: "MANDI DI VILLA" },
+                    { time: "21:00 - 07:00", act: "ISTIRAHAT BOBO DI VILLA" }
                 ]
             },
             28: {
                 date: "28-Sep-2026",
                 day: "Day Three",
                 events: [
-                    { time: "09:00", act: "Beli Oleh-oleh" },
-                    { time: "13:00", act: "Jalan-jalan di Malioboro" }
+                    { time: "07:00 - 08:00", act: "MANDI DI VILLA" },
+                    { time: "08:00 - 09:00", act: "SARAPAN DEKAT VILLA" },
+                    { time: "09:00 - 11:00", act: "RENANG DI VILLA DAN ISTIRAHAT" },
+                    { time: "11:00 - 11:30", act: "MAKAN DEKET VILLA" },
+                    { time: "11:30 - 12:00", act: "OPSIONAL (NONGS / ISTIRAHAT)" },
+                    { time: "12:00 - 13:00", act: "OTW MALIOBORO FOTO SHOOT" },
+                    { time: "13:00 - 15:30", act: "FOTO SHOOT (MALIOBORO)" },
+                    { time: "15:30 - 17:00", act: "CARI OLEH-OLEH" },
+                    { time: "17:00 - 18:00", act: "REFRESHING JALAN JALAN SANTAI" },
+                    { time: "18:00 - 19:00", act: "MAKAN MALAM" },
+                    { time: "19:00 - 20:00", act: "MALIOBORO / ALUN ALUN JOGJA" },
+                    { time: "20:00 - 20:30", act: "OTW VILLA" },
+                    { time: "20:30 - 07:00", act: "ISTIRAHAT BOBO DI VILLA" }
                 ]
             },
             29: {
                 date: "29-Sep-2026",
                 day: "Day Four",
                 events: [
-                    { time: "10:00", act: "Check out Villa" },
-                    { time: "11:30", act: "Otw perjalanan Pulang" }
+                    { time: "07:00 - 08:00", act: "MANDI DI VILLA" },
+                    { time: "08:00 - 09:00", act: "MAKAN DI VILLA" },
+                    { time: "09:00 - 11:00", act: "PREPARE CHECK OUT VILLA" },
+                    { time: "11:00 - 11:10", act: "CEK OUT VILLA" },
+                    { time: "11:10 - 13:30", act: "OTW KLATEN" },
+                    { time: "13:30 - 17:00", act: "MAKAN & BELI OLEH-OLEH KLATEN" },
+                    { time: "17:00 - 07:00", act: "OTW KLATEN - TANGERANG" }
                 ]
             }
         };
 
         function showSchedule(dateKey) {
             document.getElementById('view-dates').style.display = 'none';
-            document.getElementById('view-schedule').style.display = 'block';
+            document.getElementById('view-schedule').style.display = 'flex';
 
             const data = scheduleData[dateKey];
             
@@ -175,7 +232,7 @@
         }
 
         function showDates() {
-            document.getElementById('view-dates').style.display = 'block';
+            document.getElementById('view-dates').style.display = 'flex';
             document.getElementById('view-schedule').style.display = 'none';
         }
 

@@ -13,7 +13,7 @@
             background-repeat: no-repeat;
             background-attachment: fixed;
             margin: 0; 
-            padding: 20px; 
+            padding: 15px; 
             display: flex; 
             justify-content: center; 
             align-items: center;
@@ -25,12 +25,13 @@
             padding: 20px; 
             border-radius: 12px; 
             width: 100%; 
-            max-width: 350px; 
+            max-width: 400px; 
             box-shadow: 0 8px 20px rgba(0,0,0,0.4); 
+            max-height: 90vh;
             display: flex;
             flex-direction: column;
         }
-        h2 { text-align: center; color: #222; margin-top: 0; margin-bottom: 20px; }
+        h2 { text-align: center; color: #222; margin-top: 0; margin-bottom: 15px; }
         
         .nav-btn { 
             background-color: #6c757d; 
@@ -41,28 +42,50 @@
             cursor: pointer; 
             width: 100%; 
             font-size: 16px; 
-            margin-bottom: 20px; 
+            margin-bottom: 15px; 
+            flex-shrink: 0;
+        }
+
+        .list-scroll {
+            overflow-y: auto;
+            flex-grow: 1;
+            padding-right: 5px;
+        }
+
+        .cat-title {
+            background-color: #333;
+            color: white;
+            padding: 10px;
+            border-radius: 5px;
+            font-size: 14px;
+            margin-top: 10px;
+            margin-bottom: 5px;
+            position: sticky;
+            top: 0;
+            z-index: 2;
         }
 
         .check-list { list-style: none; padding: 0; margin: 0; }
         .check-item {
             display: flex;
             align-items: center;
-            padding: 15px 10px;
+            padding: 12px 10px;
             border-bottom: 1px solid #ddd;
             cursor: pointer;
             transition: background-color 0.2s;
         }
         .check-item:hover { background-color: #f9f9f9; }
-        .check-item:last-child { border-bottom: none; }
         
         .check-item input[type="checkbox"] {
-            transform: scale(1.5);
+            transform: scale(1.3);
             margin-right: 15px;
             cursor: pointer;
         }
-        .check-text { font-size: 16px; color: #333; transition: all 0.2s; font-weight: bold; }
+        .check-text { font-size: 14px; color: #333; font-weight: bold; flex-grow: 1; }
+        .check-qty { font-size: 12px; color: #666; font-weight: normal; background: #eee; padding: 2px 6px; border-radius: 4px; }
+        
         .done .check-text { text-decoration: line-through; color: #aaa; font-weight: normal; }
+        .done .check-qty { text-decoration: line-through; opacity: 0.5; }
     </style>
 </head>
 <body>
@@ -70,50 +93,113 @@
     <div class="container">
         <button class="nav-btn" onclick="window.location.href='index.html'">⬅ Kembali ke Menu Utama</button>
         <h2>Check List Berangkat 🛫</h2>
-        <ul class="check-list" id="berangkat-list"></ul>
+        <div class="list-scroll" id="berangkat-container"></div>
     </div>
 
     <script>
-        const itemBerangkat = [
-            "KTP, SIM & BPJS Terbawa",
-            "Dompet & Uang Cash Aman",
-            "Tiket / Bukti Pesanan Siap",
-            "Koper & Tas Masuk Kendaraan",
-            "HP & Powerbank Full Charge",
-            "Listrik, Air & Gas Rumah Dimatikan",
-            "Jendela & Pintu Rumah Terkunci"
+        const listData = [
+            {
+                id: "cat-aku", title: "👔 AKU",
+                items: [
+                    { name: "CELANA DALAM", target: "8" }, { name: "CELANA PANJANG", target: "3" },
+                    { name: "CELANA PENDEK", target: "4" }, { name: "DOMPET", target: "1" },
+                    { name: "FACIAL WASH", target: "1" }, { name: "HAND BAG", target: "1" },
+                    { name: "HOODIE", target: "1" }, { name: "HP & CHARGER", target: "1" },
+                    { name: "JAM TANGAN", target: "1" }, { name: "KACAMATA", target: "2" },
+                    { name: "KAOS KAKI", target: "3" }, { name: "KAOS OBLONG", target: "7" },
+                    { name: "KEMEJA", target: "2" }, { name: "KOPER", target: "1" },
+                    { name: "PARFUM", target: "1" }, { name: "POUCH", target: "1" },
+                    { name: "POWER BANK", target: "1" }, { name: "REMOT KAMERA", target: "1" },
+                    { name: "SENDAL", target: "1" }, { name: "SEPATU", target: "1" },
+                    { name: "SISIR", target: "1" }, { name: "TAS TRAVEL", target: "1" }
+                ]
+            },
+            {
+                id: "cat-kamu", title: "👗 KAMU (AYANG)",
+                items: [
+                    { name: "BAJU TIDUR", target: "2" }, { name: "BRA", target: "4" },
+                    { name: "CELANA DALAM", target: "8" }, { name: "CELANA PANJANG", target: "4" },
+                    { name: "CELANA PENDEK", target: "2" }, { name: "DOMPET", target: "1" },
+                    { name: "FACIAL WASH", target: "1" }, { name: "HOODIE", target: "1" },
+                    { name: "HP & CHARGER", target: "1" }, { name: "JEPITAN & KUNCIRAN", target: "1" },
+                    { name: "KACAMATA", target: "1" }, { name: "KAOS OBLONG", target: "5" },
+                    { name: "KEMEJA", target: "2" }, { name: "MAKE UP", target: "1" },
+                    { name: "PARFUM", target: "1" }, { name: "PEMBALUT", target: "1" },
+                    { name: "PLASTIK", target: "4" }, { name: "SENDAL", target: "1" },
+                    { name: "SENDOK MAKAN", target: "2" }, { name: "SEPATU", target: "1" },
+                    { name: "TANK TOP", target: "4" }, { name: "TAS", target: "1" }
+                ]
+            },
+            {
+                id: "cat-beli", title: "🛒 WAJIB DI BELI",
+                items: [
+                    { name: "AIR MINUM", target: "2" }, { name: "BODREX", target: "1" },
+                    { name: "BOTOL MINUM", target: "1" }, { name: "FLASH DISK * OTG", target: "1" },
+                    { name: "FRESH CARE", target: "1" }, { name: "HAND BODY", target: "1" },
+                    { name: "HANSAPLAS", target: "1" }, { name: "JAS HUJAN TRAVEL", target: "2" },
+                    { name: "KACA MINI", target: "1" }, { name: "KIPAS MINI", target: "1" },
+                    { name: "KOPI/TEH/SUSU", target: "1" }, { name: "MASKER", target: "1" },
+                    { name: "OBAT ALERGI", target: "1" }, { name: "PROMAG", target: "1" },
+                    { name: "SABUN KECIL", target: "1" }, { name: "SALONPAS", target: "1" },
+                    { name: "SIKAT GIGI TRAVEL", target: "2" }, { name: "SKIN CARE", target: "1" },
+                    { name: "SNACK", target: "1" }, { name: "SUN BLOCK", target: "1" },
+                    { name: "TISSUE BASAH / KERING", target: "1" }, { name: "TOLAK ANGIN", target: "1" },
+                    { name: "TRIPOD / TONGSIS", target: "1" }, { name: "VITAMIN", target: "1" }
+                ]
+            },
+            {
+                id: "cat-printilan", title: "📁 PRINTILAN",
+                items: [
+                    { name: "ATM", target: "1" }, { name: "BPJS KESEHATAN", target: "1" },
+                    { name: "E-MONEY", target: "1" }, { name: "KTP", target: "1" },
+                    { name: "SIM", target: "1" }, { name: "UANG CASH (500k)", target: "1" },
+                    { name: "UANG RECEH (500k)", target: "1" }
+                ]
+            }
         ];
 
-        const storageKey = 'jogjaListBerangkat';
+        const storageKey = 'jogjaFinalCheckBerangkat';
         let savedData = JSON.parse(localStorage.getItem(storageKey)) || [];
 
         function renderList() {
-            const listEl = document.getElementById('berangkat-list');
-            listEl.innerHTML = '';
+            const container = document.getElementById('berangkat-container');
+            container.innerHTML = '';
 
-            itemBerangkat.forEach((item, index) => {
-                const isChecked = savedData.includes(index);
-                const li = document.createElement('li');
-                li.className = `check-item ${isChecked ? 'done' : ''}`;
-                // Klik di seluruh baris bisa mencentang checkbox
-                li.onclick = (e) => {
-                    // Mencegah double trigger jika yang diklik tepat di kotak checkboxnya
-                    if (e.target.tagName !== 'INPUT') toggleCheck(index);
-                };
+            listData.forEach((category, catIndex) => {
+                const title = document.createElement('div');
+                title.className = 'cat-title';
+                title.innerText = category.title;
+                container.appendChild(title);
 
-                li.innerHTML = `
-                    <input type="checkbox" onchange="toggleCheck(${index})" ${isChecked ? 'checked' : ''}>
-                    <span class="check-text">${item}</span>
-                `;
-                listEl.appendChild(li);
+                const ul = document.createElement('ul');
+                ul.className = 'check-list';
+
+                category.items.forEach((item, itemIndex) => {
+                    const uniqueId = `${catIndex}-${itemIndex}`;
+                    const isChecked = savedData.includes(uniqueId);
+                    
+                    const li = document.createElement('li');
+                    li.className = `check-item ${isChecked ? 'done' : ''}`;
+                    li.onclick = (e) => {
+                        if (e.target.tagName !== 'INPUT') toggleCheck(uniqueId);
+                    };
+
+                    li.innerHTML = `
+                        <input type="checkbox" onchange="toggleCheck('${uniqueId}')" ${isChecked ? 'checked' : ''}>
+                        <span class="check-text">${item.name}</span>
+                        <span class="check-qty">${item.target}x</span>
+                    `;
+                    ul.appendChild(li);
+                });
+                container.appendChild(ul);
             });
         }
 
-        function toggleCheck(index) {
-            if (savedData.includes(index)) {
-                savedData = savedData.filter(i => i !== index); // Hapus centang
+        function toggleCheck(uniqueId) {
+            if (savedData.includes(uniqueId)) {
+                savedData = savedData.filter(i => i !== uniqueId);
             } else {
-                savedData.push(index); // Tambah centang
+                savedData.push(uniqueId);
             }
             localStorage.setItem(storageKey, JSON.stringify(savedData));
             renderList();

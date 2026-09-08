@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Schedule - Trip to Jogja</title>
+    <style>
+        body { 
+            font-family: Arial, sans-serif; 
+            background-color: #f4f4f9; 
+            margin: 0; 
+            padding: 20px; 
+            display: flex; 
+            justify-content: center; 
+        }
+        .container { 
+            background: white; 
+            padding: 20px; 
+            border-radius: 10px; 
+            width: 100%; 
+            max-width: 320px; 
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1); 
+        }
+        h2 { text-align: center; color: #333; margin-top: 0; }
+        
+        /* Grid untuk tombol tanggal */
+        .grid-container { 
+            display: grid; 
+            grid-template-columns: 1fr 1fr; 
+            gap: 15px; 
+            margin-top: 20px; 
+        }
+        .date-btn { 
+            background-color: #fff; 
+            border: 2px solid #333; 
+            border-radius: 10px; 
+            padding: 25px 0; 
+            font-size: 24px; 
+            font-weight: bold; 
+            cursor: pointer; 
+            box-shadow: 2px 2px 5px rgba(0,0,0,0.2); 
+        }
+        
+        /* Tombol navigasi */
+        .nav-btn { 
+            background-color: #333; 
+            color: white; 
+            border: none; 
+            padding: 10px; 
+            border-radius: 5px; 
+            cursor: pointer; 
+            width: 100%; 
+            font-size: 16px; 
+            margin-bottom: 15px; 
+        }
+        .home-btn { margin-top: 20px; background-color: #6c757d; }
+
+        /* List jadwal */
+        .timeline { list-style: none; padding: 0; margin-top: 20px; }
+        .timeline li { 
+            display: flex; 
+            margin-bottom: 15px; 
+            border-bottom: 1px solid #eee; 
+            padding-bottom: 10px; 
+        }
+        .time { font-weight: bold; color: #007bff; width: 60px; flex-shrink: 0; }
+        .activity { color: #444; }
+    </style>
+</head>
+<body>
+
+    <!-- Tampilan 1: Pilih Tanggal -->
+    <div id="view-dates" class="container">
+        <h2>Pilih Tanggal</h2>
+        <div class="grid-container">
+            <button class="date-btn" onclick="showSchedule(26)">26</button>
+            <button class="date-btn" onclick="showSchedule(27)">27</button>
+            <button class="date-btn" onclick="showSchedule(28)">28</button>
+            <button class="date-btn" onclick="showSchedule(29)">29</button>
+        </div>
+        <button class="nav-btn home-btn" onclick="window.location.href='index.html'">Kembali ke Menu Utama</button>
+    </div>
+
+    <!-- Tampilan 2: Detail Jadwal (Disembunyikan dari awal) -->
+    <div id="view-schedule" class="container" style="display: none;">
+        <button class="nav-btn" onclick="showDates()">⬅ Kembali Pilih Tanggal</button>
+        <h2 id="title-date">Tanggal</h2>
+        <h3 id="title-day" style="text-align:center; color:#666; margin-top:-10px;">Day</h3>
+        <ul class="timeline" id="schedule-list"></ul>
+    </div>
+
+    <script>
+        // Data jadwal kegiatan. Silakan edit jam dan teksnya di sini.
+        const scheduleData = {
+            26: {
+                date: "26-Sep-2026",
+                day: "Day One",
+                events: [
+                    { time: "08:00", act: "Otw ke bandara/stasiun" },
+                    { time: "09:00", act: "Sampai" },
+                    { time: "09:30", act: "Otw Villa" },
+                    { time: "10:20", act: "Sampai Villa" }
+                ]
+            },
+            27: {
+                date: "27-Sep-2026",
+                day: "Day Two",
+                events: [
+                    { time: "07:00", act: "Sarapan pagi" },
+                    { time: "08:30", act: "Jalan ke Pantai" },
+                    { time: "12:00", act: "Makan Siang & Istirahat" }
+                ]
+            },
+            28: {
+                date: "28-Sep-2026",
+                day: "Day Three",
+                events: [
+                    { time: "09:00", act: "Beli Oleh-oleh" },
+                    { time: "13:00", act: "Jalan-jalan di Malioboro" }
+                ]
+            },
+            29: {
+                date: "29-Sep-2026",
+                day: "Day Four",
+                events: [
+                    { time: "10:00", act: "Check out Villa" },
+                    { time: "11:30", act: "Otw perjalanan Pulang" }
+                ]
+            }
+        };
+
+        function showSchedule(dateKey) {
+            document.getElementById('view-dates').style.display = 'none';
+            document.getElementById('view-schedule').style.display = 'block';
+
+            const data = scheduleData[dateKey];
+            
+            document.getElementById('title-date').innerText = `Tanggal ${data.date}`;
+            document.getElementById('title-day').innerText = data.day;
+
+            const listElement = document.getElementById('schedule-list');
+            listElement.innerHTML = ''; 
+            
+            data.events.forEach(item => {
+                const li = document.createElement('li');
+                li.innerHTML = `<span class="time">${item.time}</span> <span class="activity">${item.act}</span>`;
+                listElement.appendChild(li);
+            });
+        }
+
+        function showDates() {
+            document.getElementById('view-dates').style.display = 'block';
+            document.getElementById('view-schedule').style.display = 'none';
+        }
+    </script>
+</body>
+</html>

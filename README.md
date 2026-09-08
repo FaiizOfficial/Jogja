@@ -1,1 +1,1 @@
-(https://faiizofficial.github.io/JOGJA/)
+(https://faiizofficial.github.io/Jogja/)

@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Packing List - Trip to Jogja</title>
+    <style>
+        body { 
+            font-family: Arial, sans-serif; 
+            background-image: url('jogja.jpg');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            margin: 0; 
+            padding: 15px; 
+            display: flex; 
+            justify-content: center; 
+            min-height: 100vh;
+            box-sizing: border-box;
+        }
+        .container { 
+            background: rgba(255, 255, 255, 0.95); 
+            padding: 20px; 
+            border-radius: 12px; 
+            width: 100%; 
+            max-width: 400px; 
+            box-shadow: 0 8px 20px rgba(0,0,0,0.4); 
+            display: flex;
+            flex-direction: column;
+            margin-bottom: 20px;
+        }
+        h2 { text-align: center; color: #222; margin-top: 0; margin-bottom: 20px; }
+        
+        .nav-btn { 
+            background-color: #6c757d; 
+            color: white; 
+            border: none; 
+            padding: 12px; 
+            border-radius: 5px; 
+            cursor: pointer; 
+            width: 100%; 
+            font-size: 16px; 
+            margin-bottom: 20px; 
+        }
+
+        /* Gaya Accordion Kategori */
+        .category-btn {
+            background-color: #333;
+            color: white;
+            padding: 15px;
+            font-size: 16px;
+            font-weight: bold;
+            border: none;
+            border-radius: 8px;
+            width: 100%;
+            text-align: left;
+            cursor: pointer;
+            margin-bottom: 8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .category-btn:hover { background-color: #444; }
+        
+        .category-content {
+            display: none; /* Disembunyikan dari awal */
+            background-color: white;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 10px;
+            margin-bottom: 15px;
+        }
+        .category-content.active { display: block; }
+
+        /* Gaya Baris Item */
+        .item-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #eee;
+            padding: 12px 0;
+        }
+        .item-row:last-child { border-bottom: none; }
+        
+        .item-info { flex-grow: 1; }
+        .item-name { font-weight: bold; font-size: 14px; color: #333; display: block; }
+        .item-target { font-size: 12px; color: #777; margin-top: 3px; display: block; }
+        
+        .item-controls {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .qty-input {
+            width: 40px;
+            padding: 6px;
+            text-align: center;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+        
+        /* Gaya Status Badge */
+        .badge {
+            padding: 6px 0;
+            border-radius: 4px;
+            font-size: 11px;
+            font-weight: bold;
+            width: 75px;
+            text-align: center;
+            color: white;
+            display: inline-block;
+        }
+        .badge.done { background-color: #28a745; }    /* Hijau */
+        .badge.kurang { background-color: #dc3545; }  /* Merah */
+        .badge.lebih { background-color: #fd7e14; }   /* Oranye */
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <button class="nav-btn" onclick="window.location.href='index.html'">⬅ Kembali ke Menu Utama</button>
+        <h2>Packing List 🎒</h2>
+        
+        <!-- Wadah tempat list akan dibuat otomatis oleh JavaScript -->
+        <div id="list-container"></div>
+    </div>
+
+    <script>
+        // Data master dari Excel
+        const listData = [
+            {
+                id: "cat-aku", title: "👔 AKU",
+                items: [
+                    { name: "CELANA DALAM", target: 8 }, { name: "CELANA PANJANG", target: 3 },
+                    { name: "CELANA PENDEK", target: 4 }, { name: "DOMPET", target: 1 },
+                    { name: "FACIAL WASH", target: 1 }, { name: "HAND BAG", target: 1 },
+                    { name: "HOODIE", target: 1 }, { name: "HP & CHARGER", target: 1 },
+                    { name: "JAM TANGAN", target: 1 }, { name: "KACAMATA", target: 2 },
+                    { name: "KAOS KAKI", target: 3 }, { name: "KAOS OBLONG", target: 7 },
+                    { name: "KEMEJA", target: 2 }, { name: "KOPER", target: 1 },
+                    { name: "PARFUM", target: 1 }, { name: "POUCH", target: 1 },
+                    { name: "POWER BANK", target: 1 }, { name: "REMOT KAMERA", target: 1 },
+                    { name: "SENDAL", target: 1 }, { name: "SEPATU", target: 1 },
+                    { name: "SISIR", target: 1 }, { name: "TAS TRAVEL", target: 1 }
+                ]
+            },
+            {
+                id: "cat-kamu", title: "👗 KAMU (AYANG)",
+                items: [
+                    { name: "BAJU TIDUR", target: 2 }, { name: "BRA", target: 4 },
+                    { name: "CELANA DALAM", target: 8 }, { name: "CELANA PANJANG", target: 4 },
+                    { name: "CELANA PENDEK", target: 2 }, { name: "DOMPET", target: 1 },
+                    { name: "FACIAL WASH", target: 1 }, { name: "HOODIE", target: 1 },
+                    { name: "HP & CHARGER", target: 1 }, { name: "JEPITAN & KUNCIRAN", target: 1 },
+                    { name: "KACAMATA", target: 1 }, { name: "KAOS OBLONG", target: 5 },
+                    { name: "KEMEJA", target: 2 }, { name: "MAKE UP", target: 1 },
+                    { name: "PARFUM", target: 1 }, { name: "PEMBALUT", target: 1 },
+                    { name: "PLASTIK", target: 4 }, { name: "SENDAL", target: 1 },
+                    { name: "SENDOK MAKAN", target: 2 }, { name: "SEPATU", target: 1 },
+                    { name: "TANK TOP", target: 4 }, { name: "TAS", target: 1 }
+                ]
+            },
+            {
+                id: "cat-beli", title: "🛒 WAJIB DI BELI",
+                items: [
+                    { name: "AIR MINUM", target: 2 }, { name: "BODREX", target: 1 },
+                    { name: "BOTOL MINUM", target: 1 }, { name: "FLASH DISK * OTG", target: 1 },
+                    { name: "FRESH CARE", target: 1 }, { name: "HAND BODY", target: 1 },
+                    { name: "HANSAPLAS", target: 1 }, { name: "JAS HUJAN TRAVEL", target: 2 },
+                    { name: "KACA MINI", target: 1 }, { name: "KIPAS MINI", target: 1 },
+                    { name: "KOPI/TEH/SUSU", target: 1 }, { name: "MASKER", target: 1 },
+                    { name: "OBAT ALERGI", target: 1 }, { name: "PROMAG", target: 1 },
+                    { name: "SABUN KECIL", target: 1 }, { name: "SALONPAS", target: 1 },
+                    { name: "SIKAT GIGI TRAVEL", target: 2 }, { name: "SKIN CARE", target: 1 },
+                    { name: "SNACK", target: 1 }, { name: "SUN BLOCK", target: 1 },
+                    { name: "TISSUE BASAH / KERING", target: 1 }, { name: "TOLAK ANGIN", target: 1 },
+                    { name: "TRIPOD / TONGSIS", target: 1 }, { name: "VITAMIN", target: 1 }
+                ]
+            },
+            {
+                id: "cat-printilan", title: "📁 PRINTILAN",
+                items: [
+                    { name: "ATM", target: 1 }, { name: "BPJS KESEHATAN", target: 1 },
+                    { name: "E-MONEY", target: 1 }, { name: "KTP", target: 1 },
+                    { name: "SIM", target: 1 }, { name: "UANG CASH (500k)", target: 1 },
+                    { name: "UANG RECEH (500k)", target: 1 }
+                ]
+            }
+        ];
+
+        // Ambil data dari Local Storage (jika ada)
+        let savedState = JSON.parse(localStorage.getItem('jogjaPackingList')) || {};
+
+        function renderList() {
+            const container = document.getElementById('list-container');
+            container.innerHTML = '';
+
+            listData.forEach((category, catIndex) => {
+                // Buat Tombol Kategori (Accordion)
+                const btn = document.createElement('button');
+                btn.className = 'category-btn';
+                btn.innerHTML = `<span>${category.title}</span> <span>⬇</span>`;
+                btn.onclick = () => toggleCategory(category.id);
+                container.appendChild(btn);
+
+                // Buat Konten List untuk Kategori Tersebut
+                const contentDiv = document.createElement('div');
+                contentDiv.id = category.id;
+                contentDiv.className = 'category-content';
+
+                category.items.forEach((item, itemIndex) => {
+                    // Cek jika ada nilai tersimpan, jika tidak default 0
+                    const stateKey = `${category.id}-${itemIndex}`;
+                    const currentQty = savedState[stateKey] !== undefined ? savedState[stateKey] : 0;
+                    
+                    const row = document.createElement('div');
+                    row.className = 'item-row';
+                    
+                    // Hitung status awal
+                    const badgeHtml = getBadgeHtml(currentQty, item.target);
+
+                    row.innerHTML = `
+                        <div class="item-info">
+                            <span class="item-name">${item.name}</span>
+                            <span class="item-target">Target: ${item.target}</span>
+                        </div>
+                        <div class="item-controls">
+                            <input type="number" class="qty-input" min="0" value="${currentQty}" 
+                                   onchange="updateItem('${stateKey}', this.value, ${item.target}, 'badge-${stateKey}')">
+                            <span id="badge-${stateKey}">${badgeHtml}</span>
+                        </div>
+                    `;
+                    contentDiv.appendChild(row);
+                });
+
+                container.appendChild(contentDiv);
+            });
+        }
+
+        // Fungsi buka/tutup kategori
+        function toggleCategory(id) {
+            const content = document.getElementById(id);
+            content.classList.toggle('active');
+        }
+
+        // Fungsi memperbarui logika saat input angka berubah
+        function updateItem(stateKey, newValue, target, badgeId) {
+            let val = parseInt(newValue) || 0; // Ubah teks ke angka
+            savedState[stateKey] = val; // Simpan ke state
+            localStorage.setItem('jogjaPackingList', JSON.stringify(savedState)); // Simpan ke HP
+            
+            // Perbarui tampilan badge
+            document.getElementById(badgeId).innerHTML = getBadgeHtml(val, target);
+        }
+
+        // Fungsi penentu warna dan teks
+        function getBadgeHtml(actual, target) {
+            let diff = actual - target;
+            if (diff === 0) {
+                return `<span class="badge done">DONE</span>`;
+            } else if (diff < 0) {
+                return `<span class="badge kurang">${diff} Kurang</span>`;
+            } else {
+                return `<span class="badge lebih">+${diff} Lebih</span>`;
+            }
+        }
+
+        // Jalankan render saat pertama dibuka
+        renderList();
+    </script>
+</body>
+</html>

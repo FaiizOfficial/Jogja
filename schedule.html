@@ -8,10 +8,15 @@
         body { 
             font-family: Arial, sans-serif; 
             background-image: url('jogja.jpg');
+            background-size: cover; /* Memaksa foto memenuhi seluruh layar */
+            background-position: center; /* Memposisikan foto tepat di tengah */
+            background-repeat: no-repeat; /* Mencegah foto berulang/tiling */
+            background-attachment: fixed; /* Foto tidak ikut bergeser saat di-scroll */
             margin: 0; 
             padding: 20px; 
             display: flex; 
             justify-content: center; 
+            min-height: 100vh; /* Memastikan tinggi layar minimal seukuran HP */
         }
         .container { 
             background: white; 

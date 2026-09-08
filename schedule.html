@@ -8,17 +8,27 @@
         body { 
             font-family: Arial, sans-serif; 
             background-image: url('jogja.jpg');
-            background-size: cover; /* Memaksa foto memenuhi seluruh layar */
-            background-position: center; /* Memposisikan foto tepat di tengah */
-            background-repeat: no-repeat; /* Mencegah foto berulang/tiling */
-            background-attachment: fixed; /* Foto tidak ikut bergeser saat di-scroll */
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
             margin: 0; 
             padding: 20px; 
             display: flex; 
             justify-content: center; 
-            min-height: 100vh; /* Memastikan tinggi layar minimal seukuran HP */
+            align-items: center;
+            min-height: 100vh;
+            box-sizing: border-box;
         }
-        h2 { text-align: center; color: #333; margin-top: 0; }
+        .container { 
+            background: rgba(255, 255, 255, 0.95); /* Putih solid dengan sedikit transparansi */
+            padding: 20px; 
+            border-radius: 12px; 
+            width: 100%; 
+            max-width: 320px; 
+            box-shadow: 0 8px 20px rgba(0,0,0,0.4); /* Bayangan tegas agar kotak terpisah dari foto */
+        }
+        h2 { text-align: center; color: #222; margin-top: 0; }
         
         /* Grid untuk tombol tanggal */
         .grid-container { 
@@ -36,6 +46,10 @@
             font-weight: bold; 
             cursor: pointer; 
             box-shadow: 2px 2px 5px rgba(0,0,0,0.2); 
+            transition: background-color 0.2s;
+        }
+        .date-btn:hover {
+            background-color: #f0f0f0;
         }
         
         /* Tombol navigasi */
@@ -57,21 +71,21 @@
         .timeline li { 
             display: flex; 
             margin-bottom: 15px; 
-            border-bottom: 1px solid #eee; 
+            border-bottom: 1px solid #ddd; 
             padding-bottom: 10px; 
         }
-        .time { font-weight: bold; color: #007bff; width: 60px; flex-shrink: 0; }
-        .activity { color: #444; }
+        .time { font-weight: bold; color: #0056b3; width: 60px; flex-shrink: 0; }
+        .activity { color: #333; }
         
         /* Gaya untuk jam realtime */
         .clock {
             text-align: center;
             font-size: 28px;
             font-weight: bold;
-            color: #d9534f; /* Warna merah agar mencolok */
+            color: #d9534f;
             margin-top: 5px;
             margin-bottom: 15px;
-            font-family: 'Courier New', Courier, monospace; /* Font ala jam digital */
+            font-family: 'Courier New', Courier, monospace;
         }
     </style>
 </head>
@@ -94,7 +108,7 @@
         <button class="nav-btn" onclick="showDates()">⬅ Kembali Pilih Tanggal</button>
         
         <h2 id="title-date">Tanggal</h2>
-        <h3 id="title-day" style="text-align:center; color:#666; margin-top:-10px; margin-bottom: 5px;">Day</h3>
+        <h3 id="title-day" style="text-align:center; color:#555; margin-top:-10px; margin-bottom: 5px;">Day</h3>
         
         <!-- Wadah Jam Realtime -->
         <div class="clock" id="realtime-clock">00:00:00</div>
@@ -165,11 +179,8 @@
             document.getElementById('view-schedule').style.display = 'none';
         }
 
-        // Fungsi untuk mengupdate jam realtime
         function updateClock() {
             const now = new Date();
-            
-            // padStart digunakan untuk menambah angka '0' di depan jika angkanya cuma 1 digit (misal jam 9 jadi 09)
             const hours = String(now.getHours()).padStart(2, '0');
             const minutes = String(now.getMinutes()).padStart(2, '0');
             const seconds = String(now.getSeconds()).padStart(2, '0');
@@ -177,10 +188,7 @@
             document.getElementById('realtime-clock').innerText = `${hours}:${minutes}:${seconds}`;
         }
 
-        // Jalankan fungsi updateClock setiap 1000 milidetik (1 detik)
         setInterval(updateClock, 1000);
-        
-        // Panggil fungsinya sekali saat web pertama dimuat agar tidak nunggu 1 detik dulu
         updateClock();
     </script>
 </body>

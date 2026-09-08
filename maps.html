@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Maps - Trip to Jogja</title>
+    <style>
+        body { 
+            font-family: Arial, sans-serif; 
+            background-color: #f4f4f9; 
+            margin: 0; 
+            padding: 20px; 
+            display: flex; 
+            justify-content: center; 
+        }
+        .container { 
+            background: white; 
+            padding: 20px; 
+            border-radius: 10px; 
+            width: 100%; 
+            max-width: 320px; 
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1); 
+        }
+        h2 { text-align: center; color: #333; margin-top: 0; }
+        
+        /* Gaya untuk Header Tanggal */
+        .day-header {
+            margin-top: 25px;
+            margin-bottom: 15px;
+            border-bottom: 2px solid #eee;
+            padding-bottom: 5px;
+        }
+        .day-header h3 { margin: 0; color: #333; font-size: 16px;}
+        .day-header p { margin: 2px 0 0 0; color: #777; font-size: 14px; }
+        
+        /* Gaya untuk tombol rute Maps */
+        .route-link {
+            display: block;
+            background-color: #fff;
+            border: 1px solid #ddd;
+            border-left: 4px solid #007bff; /* Garis biru di sebelah kiri biar mirip aplikasi rute */
+            border-radius: 6px;
+            padding: 12px;
+            margin-bottom: 10px;
+            text-decoration: none;
+            color: #333;
+            font-size: 13px;
+            font-weight: bold;
+            box-shadow: 1px 1px 4px rgba(0,0,0,0.05);
+            transition: background-color 0.2s;
+        }
+        .route-link:hover {
+            background-color: #f0f8ff;
+        }
+        
+        /* Tombol navigasi */
+        .home-btn { 
+            background-color: #6c757d; 
+            color: white; 
+            border: none; 
+            padding: 12px; 
+            border-radius: 5px; 
+            cursor: pointer; 
+            width: 100%; 
+            font-size: 16px; 
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h2>Peta & Rute 📍</h2>
+
+        <!-- Day 1 -->
+        <div class="day-header">
+            <h3>Tanggal 26-Sep-2026</h3>
+            <p>Day one</p>
+        </div>
+        
+        <!-- target="_blank" digunakan agar maps terbuka di tab/aplikasi baru -->
+        <a href="https://www.google.com/maps/dir/?api=1&origin=Stasiun+Pasar+Senen,+Jakarta&destination=Stasiun+Lempuyangan,+Yogyakarta" target="_blank" class="route-link">
+            STASIUN SENEN - STASIUN LEMPUYANGAN
+        </a>
+        
+        <a href="https://www.google.com/maps/dir/?api=1&origin=Stasiun+Lempuyangan,+Yogyakarta&destination=Villa+Yogyakarta" target="_blank" class="route-link">
+            STASIUN LEMPUYANGAN - VILLA
+        </a>
+        
+        <a href="https://www.google.com/maps/dir/?api=1&origin=Villa+Yogyakarta&destination=Jalan+Malioboro,+Yogyakarta" target="_blank" class="route-link">
+            VILLA - MALIOBORO
+        </a>
+
+        <!-- Lu bisa copy-paste blok div "day-header" dan tag <a> di atas untuk menambah Day 2, Day 3, dst -->
+
+        <button class="home-btn" onclick="window.location.href='index.html'">Kembali ke Menu Utama</button>
+    </div>
+
+</body>
+</html>

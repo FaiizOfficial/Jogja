@@ -33,7 +33,6 @@
         }
         h2 { text-align: center; color: #222; margin-top: 0; }
         
-        /* Grid untuk tombol tanggal (4 hari) */
         .grid-container { 
             display: grid; 
             grid-template-columns: 1fr 1fr; 
@@ -53,7 +52,6 @@
         }
         .date-btn:hover { background-color: #f0f0f0; }
         
-        /* Tombol navigasi */
         .nav-btn { 
             background-color: #333; 
             color: white; 
@@ -68,7 +66,6 @@
         }
         .home-btn { margin-top: 20px; background-color: #6c757d; }
 
-        /* Area list rute yang bisa di-scroll */
         .route-scroll {
             overflow-y: auto;
             flex-grow: 1;
@@ -79,13 +76,12 @@
             gap: 10px;
         }
 
-        /* Gaya untuk tombol rute Maps */
         .route-link {
             display: flex;
             align-items: center;
             background-color: #f8f9fa;
             border: 1px solid #ddd;
-            border-left: 5px solid #007bff; /* Garis biru ala penunjuk jalan */
+            border-left: 5px solid #007bff;
             border-radius: 6px;
             padding: 12px;
             text-decoration: none;
@@ -103,12 +99,10 @@
             font-size: 18px;
             margin-right: 10px;
         }
-
     </style>
 </head>
 <body>
 
-    <!-- Tampilan 1: Pilih Tanggal -->
     <div id="view-dates" class="container">
         <h2>Peta & Rute 📍</h2>
         <div class="grid-container">
@@ -120,53 +114,53 @@
         <button class="nav-btn home-btn" onclick="window.location.href='index.html'">Kembali ke Menu Utama</button>
     </div>
 
-    <!-- Tampilan 2: Detail Rute -->
     <div id="view-routes" class="container" style="display: none;">
         <button class="nav-btn" onclick="showDates()">⬅ Kembali Pilih Tanggal</button>
         
         <h2 id="title-date" style="margin-bottom: 15px; font-size: 20px;"></h2>
         
-        <!-- Wadah List Rute -->
         <div class="route-scroll" id="route-list"></div>
     </div>
 
     <script>
-        // Data rute Google Maps berdasarkan jadwal Excel lu
         const routeData = {
             26: {
                 date: "26-September-2026",
                 routes: [
                     { name: "TANGERANG - STASIUN SENEN", url: "https://www.google.com/maps/dir/?api=1&origin=Tangerang&destination=Stasiun+Pasar+Senen" },
-                    { name: "STASIUN JOGJA - VILLA", url: "https://www.google.com/maps/dir/?api=1&origin=Stasiun+Yogyakarta&destination=Villa+Yogyakarta" }
+                    { name: "STASIUN SENEN - STASIUN LEMPUYANGAN", url: "https://www.google.com/maps/dir/?api=1&origin=Stasiun+Pasar+Senen&destination=Stasiun+Lempuyangan" },
+                    { name: "STASIUN LEMPUYANGAN - CASA DE KAYANA VILLA", url: "https://www.google.com/maps/dir/?api=1&origin=Stasiun+Lempuyangan&destination=Casa+De+Kayana+Villa" }
                 ]
             },
             27: {
                 date: "27-September-2026",
                 routes: [
-                    { name: "VILLA - CANDI PRAMBANAN", url: "https://www.google.com/maps/dir/?api=1&origin=Villa+Yogyakarta&destination=Candi+Prambanan" },
-                    { name: "CANDI PRAMBANAN - KEDATHON", url: "https://www.google.com/maps/dir/?api=1&origin=Candi+Prambanan&destination=Kedathon+Yogyakarta" },
+                    { name: "CASA DE KAYANA VILLA - CANDI PRAMBANAN", url: "https://www.google.com/maps/dir/?api=1&origin=Casa+De+Kayana+Villa&destination=Candi+Prambanan" },
+                    { name: "CANDI PRAMBANAN - KEDATHON JOGJA", url: "https://www.google.com/maps/dir/?api=1&origin=Candi+Prambanan&destination=Kedathon+Yogyakarta" },
                     { name: "KEDATHON - TAMAN SARI", url: "https://www.google.com/maps/dir/?api=1&origin=Kedathon+Yogyakarta&destination=Taman+Sari+Yogyakarta" },
                     { name: "TAMAN SARI - MUSEUM VREDEBURG", url: "https://www.google.com/maps/dir/?api=1&origin=Taman+Sari+Yogyakarta&destination=Museum+Vredeburg" },
                     { name: "MUSEUM VREDEBURG - TUGU JOGJA", url: "https://www.google.com/maps/dir/?api=1&origin=Museum+Vredeburg&destination=Tugu+Jogja" },
                     { name: "TUGU JOGJA - MALIOBORO", url: "https://www.google.com/maps/dir/?api=1&origin=Tugu+Jogja&destination=Jalan+Malioboro" },
-                    { name: "MALIOBORO - VILLA", url: "https://www.google.com/maps/dir/?api=1&origin=Jalan+Malioboro&destination=Villa+Yogyakarta" }
+                    { name: "MALIOBORO - CASA DE KAYANA VILLA", url: "https://www.google.com/maps/dir/?api=1&origin=Jalan+Malioboro&destination=Casa+De+Kayana+Villa" }
                 ]
             },
             28: {
                 date: "28-September-2026",
                 routes: [
-                    { name: "VILLA - MALIOBORO", url: "https://www.google.com/maps/dir/?api=1&origin=Villa+Yogyakarta&destination=Jalan+Malioboro" },
-                    { name: "MALIOBORO - PASAR BERINGHARJO", url: "https://www.google.com/maps/dir/?api=1&origin=Jalan+Malioboro&destination=Pasar+Beringharjo" },
-                    { name: "PASAR BERINGHARJO - ALUN ALUN", url: "https://www.google.com/maps/dir/?api=1&origin=Pasar+Beringharjo&destination=Alun+Alun+Kidul+Yogyakarta" },
-                    { name: "ALUN ALUN - VILLA", url: "https://www.google.com/maps/dir/?api=1&origin=Alun+Alun+Kidul+Yogyakarta&destination=Villa+Yogyakarta" }
+                    { name: "CASA DE KAYANA VILLA - MALIOBORO", url: "https://www.google.com/maps/dir/?api=1&origin=Casa+De+Kayana+Villa&destination=Jalan+Malioboro" },
+                    { name: "MALIOBORO - PASAR NGASEM/BERINGHARJO", url: "https://www.google.com/maps/dir/?api=1&origin=Jalan+Malioboro&destination=Pasar+Beringharjo" },
+                    { name: "PASAR BERINGHARJO - ALUN ALUN JOGJA", url: "https://www.google.com/maps/dir/?api=1&origin=Pasar+Beringharjo&destination=Alun+Alun+Kidul+Yogyakarta" },
+                    { name: "ALUN ALUN JOGJA - CASA DE KAYANA VILLA", url: "https://www.google.com/maps/dir/?api=1&origin=Alun+Alun+Kidul+Yogyakarta&destination=Casa+De+Kayana+Villa" }
                 ]
             },
             29: {
                 date: "29-September-2026",
                 routes: [
-                    { name: "VILLA - STASIUN JOGJA", url: "https://www.google.com/maps/dir/?api=1&origin=Villa+Yogyakarta&destination=Stasiun+Yogyakarta" },
-                    { name: "STASIUN JOGJA - KLATEN", url: "https://www.google.com/maps/dir/?api=1&origin=Stasiun+Yogyakarta&destination=Klaten" },
-                    { name: "KLATEN - DELANGGU", url: "https://www.google.com/maps/dir/?api=1&origin=Klaten&destination=Delanggu" }
+                    { name: "CASA DE KAYANA VILLA - STASIUN JOGJA", url: "https://www.google.com/maps/dir/?api=1&origin=Casa+De+Kayana+Villa&destination=Stasiun+Yogyakarta" },
+                    { name: "STASIUN JOGJA - STASIUN KLATEN / DELANGGU", url: "https://www.google.com/maps/dir/?api=1&origin=Stasiun+Yogyakarta&destination=Stasiun+Klaten" },
+                    { name: "STASIUN KLATEN - PASAR DELANGGU", url: "https://www.google.com/maps/dir/?api=1&origin=Stasiun+Klaten&destination=Pasar+Delanggu" },
+                    { name: "PASAR DELANGGU - RUMAH MBAH", url: "https://www.google.com/maps/dir/?api=1&origin=Pasar+Delanggu&destination=37Q8%2B9G5+Klaten" },
+                    { name: "RUMAH MBAH - TANGERANG", url: "https://www.google.com/maps/dir/?api=1&origin=37Q8%2B9G5+Klaten&destination=Tangerang" }
                 ]
             }
         };
@@ -184,7 +178,7 @@
             data.routes.forEach(item => {
                 const a = document.createElement('a');
                 a.href = item.url;
-                a.target = "_blank"; // Membuka di tab/aplikasi baru
+                a.target = "_blank"; 
                 a.className = "route-link";
                 a.innerHTML = `<span class="route-icon">🗺️</span> <span>${item.name}</span>`;
                 

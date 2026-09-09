@@ -137,12 +137,12 @@
                 date: "26-September-2026",
                 events: [
                     { time: "05:00 - 06:00", act: "OTW STASIUN SENEN" },
-                    { time: "07:55 - 15:00", act: "OTW TANGERANG - JOGJA" },
-                    { time: "15:00 - 15:40", act: "OTW KE VILLA" },
-                    { time: "15:40 - 15:50", act: "CHECK IN DI VILLA" },
-                    { time: "15:50 - 16:40", act: "RENTAL MOTOR ( COD DI VILLA )" },
-                    { time: "16:40 - 18:00", act: "ISTIRAHAT DI VILLA ( MANDI )" },
-                    { time: "18:00 - 19:00", act: "MAKAN MALAM" },
+                    { time: "07:55 - 15:50", act: "OTW TANGERANG - JOGJA" },
+                    { time: "15:50 - 16:50", act: "OTW KE VILLA" },
+                    { time: "16:50 - 17:00", act: "CHECK IN DI VILLA" },
+                    { time: "17:00 - 17:40", act: "RENTAL MOTOR ( COD DI VILLA )" },
+                    { time: "17:40 - 18:10", act: "ISTIRAHAT DI VILLA ( MANDI )" },
+                    { time: "18:10 - 19:00", act: "MAKAN MALAM" },
                     { time: "19:00 - 07:00", act: "ISTIRAHAT BOBO DI VILLA" }
                 ]
             },
@@ -209,13 +209,11 @@
         };
 
         function showSchedule(dateKey) {
-            // Sembunyikan grid tanggal, tampilkan detail jadwal
             document.getElementById('view-dates').style.display = 'none';
             document.getElementById('view-schedule').style.display = 'flex';
 
             const data = scheduleData[dateKey];
             
-            // Masukkan tanggal bersih (misal: 26-September-2026)
             document.getElementById('title-date').innerText = data.date;
 
             const listElement = document.getElementById('schedule-list');

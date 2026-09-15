@@ -1,3 +1,12 @@
+Wah, ngebantu banget lu kasih list link Google Maps-nya! Karena lu udah punya titik koordinat (*pin*) yang spesifik untuk setiap tempatnya, gua langsung tanam link asli dari lu ke dalam tombol-tombol rutenya.
+
+Jadi cara kerjanya sekarang lebih praktis: pas lu klik rutenya, Google Maps di HP bakal **langsung ngebuka titik lokasi persisnya**. Nanti lu tinggal pencet tombol **"Rute" / "Direction"** di aplikasi Maps lu, dan arahnya otomatis bakal ngikutin posisi lu saat itu. Ini jauh lebih akurat buat navigasi.
+
+*(Satu-satunya yang gua pakai link pencarian biasa cuma Gudeg Bu Jum karena tadi nggak ada di list link lu).*
+
+Silakan *copy-paste* dan timpa seluruh isi file **`maps.html`** lu dengan kode yang udah di-update penuh ini:
+
+```html
 <!DOCTYPE html>
 <html lang="id">
 <head>
@@ -127,40 +136,47 @@
             26: {
                 date: "26-September-2026",
                 routes: [
-                    { name: "TANGERANG - STASIUN SENEN", url: "https://www.google.com/maps/dir/?api=1&origin=Tangerang&destination=Stasiun+Pasar+Senen" },
-                    { name: "STASIUN SENEN - STASIUN LEMPUYANGAN", url: "https://www.google.com/maps/dir/?api=1&origin=Stasiun+Pasar+Senen&destination=Stasiun+Lempuyangan" },
-                    { name: "STASIUN LEMPUYANGAN - CASA DE KAYANA VILLA", url: "https://www.google.com/maps/dir/?api=1&origin=Stasiun+Lempuyangan&destination=Casa+De+Kayana+Villa" }
+                    { name: "RUMAH - STASIUN SENEN", url: "https://maps.app.goo.gl/HVab3NnLw3CUmqut9?g_st=ic" },
+                    { name: "STASIUN SENEN - ST. LEMPUYANGAN", url: "https://maps.app.goo.gl/ZW9CVaSj3LBFPaGr5?g_st=ipc" },
+                    { name: "ST. LEMPUYANGAN - VILLA", url: "https://maps.app.goo.gl/QLDMw9pebLr51tZH9?g_st=ic" },
+                    { name: "VILLA - KOPI KLOTOK", url: "https://maps.app.goo.gl/rEzW5UYY6YuSnuJo9?g_st=ic" },
+                    { name: "KOPI KLOTOK - VILLA", url: "https://maps.app.goo.gl/QLDMw9pebLr51tZH9?g_st=ic" }
                 ]
             },
             27: {
                 date: "27-September-2026",
                 routes: [
-                    { name: "CASA DE KAYANA VILLA - CANDI PRAMBANAN", url: "https://www.google.com/maps/dir/?api=1&origin=Casa+De+Kayana+Villa&destination=Candi+Prambanan" },
-                    { name: "CANDI PRAMBANAN - KEDATHON JOGJA", url: "https://www.google.com/maps/dir/?api=1&origin=Candi+Prambanan&destination=Kedathon+Yogyakarta" },
-                    { name: "KEDATHON - TAMAN SARI", url: "https://www.google.com/maps/dir/?api=1&origin=Kedathon+Yogyakarta&destination=Taman+Sari+Yogyakarta" },
-                    { name: "TAMAN SARI - MUSEUM VREDEBURG", url: "https://www.google.com/maps/dir/?api=1&origin=Taman+Sari+Yogyakarta&destination=Museum+Vredeburg" },
-                    { name: "MUSEUM VREDEBURG - TUGU JOGJA", url: "https://www.google.com/maps/dir/?api=1&origin=Museum+Vredeburg&destination=Tugu+Jogja" },
-                    { name: "TUGU JOGJA - MALIOBORO", url: "https://www.google.com/maps/dir/?api=1&origin=Tugu+Jogja&destination=Jalan+Malioboro" },
-                    { name: "MALIOBORO - CASA DE KAYANA VILLA", url: "https://www.google.com/maps/dir/?api=1&origin=Jalan+Malioboro&destination=Casa+De+Kayana+Villa" }
+                    { name: "VILLA - CANDI PRAMBANAN", url: "https://maps.app.goo.gl/S5GMeGxK1hF4AAQ28?g_st=ic" },
+                    { name: "CANDI PRAMBANAN - GUDEG BU JUM", url: "https://www.google.com/maps/search/?api=1&query=Gudeg+Bu+Jum+Jogja" },
+                    { name: "GUDEG BU JUM - PASAR NGASEM", url: "https://maps.app.goo.gl/fR47cjq9hNapAjEy6?g_st=ic" },
+                    { name: "PASAR NGASEM - KERATON JOGJA", url: "https://maps.app.goo.gl/BSBmhUitpBZiKxRUA?g_st=ic" },
+                    { name: "KERATON - TAMAN SARI", url: "https://maps.app.goo.gl/PJobLqDYkL67wtpf6?g_st=ic" },
+                    { name: "TAMAN SARI - MUSEUM SENOBUDOYO", url: "https://maps.app.goo.gl/5cszXR2kY8NC5ZyM8?g_st=ic" },
+                    { name: "MUSEUM SENOBUDOYO - BENTENG VREDEBURG", url: "https://maps.app.goo.gl/CZEwbNJZtn6sse1A7?g_st=ic" },
+                    { name: "BENTENG VREDEBURG - TUGU JOGJA", url: "https://maps.app.goo.gl/NGoH4QCrHLQXTQp28?g_st=ic" },
+                    { name: "TUGU JOGJA - MALIOBORO", url: "https://maps.app.goo.gl/N2rJwwgVfTCtFJmT8?g_st=ic" },
+                    { name: "MALIOBORO - VILLA", url: "https://maps.app.goo.gl/QLDMw9pebLr51tZH9?g_st=ic" }
                 ]
             },
             28: {
                 date: "28-September-2026",
                 routes: [
-                    { name: "CASA DE KAYANA VILLA - MALIOBORO", url: "https://www.google.com/maps/dir/?api=1&origin=Casa+De+Kayana+Villa&destination=Jalan+Malioboro" },
-                    { name: "MALIOBORO - PASAR NGASEM/BERINGHARJO", url: "https://www.google.com/maps/dir/?api=1&origin=Jalan+Malioboro&destination=Pasar+Beringharjo" },
-                    { name: "PASAR BERINGHARJO - ALUN ALUN JOGJA", url: "https://www.google.com/maps/dir/?api=1&origin=Pasar+Beringharjo&destination=Alun+Alun+Kidul+Yogyakarta" },
-                    { name: "ALUN ALUN JOGJA - CASA DE KAYANA VILLA", url: "https://www.google.com/maps/dir/?api=1&origin=Alun+Alun+Kidul+Yogyakarta&destination=Casa+De+Kayana+Villa" }
+                    { name: "VILLA - FOTO SHOOT (MALIOBORO)", url: "https://maps.app.goo.gl/cF5egNJ6gkSokDuQ7" },
+                    { name: "MALIOBORO - PASAR BERINGHARJO", url: "https://maps.app.goo.gl/fDDc2UJnHzfxJgjz7?g_st=ic" },
+                    { name: "PASAR BERINGHARJO - HUTAN PINUS", url: "https://maps.app.goo.gl/aYs2BBAjNaBcNa9UA?g_st=ic" },
+                    { name: "HUTAN PINUS - IRBABO PARK", url: "https://maps.app.goo.gl/taNnwJC5fFdZptfx5?g_st=ic" },
+                    { name: "IRBABO PARK - WARUNG GASOTANG", url: "https://maps.app.goo.gl/Nshc3J46jGuerFyX6?g_st=ic" },
+                    { name: "WARUNG GASOTANG - VILLA", url: "https://maps.app.goo.gl/QLDMw9pebLr51tZH9?g_st=ic" }
                 ]
             },
             29: {
                 date: "29-September-2026",
                 routes: [
-                    { name: "CASA DE KAYANA VILLA - STASIUN JOGJA", url: "https://www.google.com/maps/dir/?api=1&origin=Casa+De+Kayana+Villa&destination=Stasiun+Yogyakarta" },
-                    { name: "STASIUN JOGJA - STASIUN KLATEN / DELANGGU", url: "https://www.google.com/maps/dir/?api=1&origin=Stasiun+Yogyakarta&destination=Stasiun+Klaten" },
-                    { name: "STASIUN KLATEN - PASAR DELANGGU", url: "https://www.google.com/maps/dir/?api=1&origin=Stasiun+Klaten&destination=Pasar+Delanggu" },
-                    { name: "PASAR DELANGGU - RUMAH MBAH", url: "https://www.google.com/maps/dir/?api=1&origin=Pasar+Delanggu&destination=37Q8%2B9G5+Klaten" },
-                    { name: "RUMAH MBAH - TANGERANG", url: "https://www.google.com/maps/dir/?api=1&origin=37Q8%2B9G5+Klaten&destination=Tangerang" }
+                    { name: "VILLA - ST. LEMPUYANGAN", url: "https://maps.app.goo.gl/ZW9CVaSj3LBFPaGr5?g_st=ipc" },
+                    { name: "ST. LEMPUYANGAN - RUMAH MBAH", url: "https://maps.app.goo.gl/Go3PWPN2ZnXerZY89?g_st=ic" },
+                    { name: "RUMAH MBAH - PASAR DELANGGU", url: "https://maps.app.goo.gl/KbkB2cKVbVHE2Y7g7?g_st=ic" },
+                    { name: "DELANGGU - TERMINAL PORIS", url: "https://maps.app.goo.gl/js6V46iB8PcRYCQ78?g_st=ic" },
+                    { name: "TERMINAL PORIS - RUMAH", url: "https://maps.app.goo.gl/hkvD8mxBc6bbuXNB6?g_st=ic" }
                 ]
             }
         };
@@ -193,3 +209,5 @@
     </script>
 </body>
 </html>
+
+```

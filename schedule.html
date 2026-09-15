@@ -1,3 +1,10 @@
+Bisa banget! Ide yang keren banget biar webnya berasa interaktif dan pintar.
+
+Gua udah tambahin fitur **Status Live Otomatis** di bawah jam *realtime*. Jadi, ketika tanggal dan jam di HP lu masuk ke dalam rentang waktu salah satu kegiatan di jadwal, webnya bakal otomatis nampilin keterangan kegiatan apa yang sedang berlangsung saat itu, lengkap dengan efek sorot (*highlight*) kuning di baris jadwalnya!
+
+Silakan *copy-paste* dan timpa seluruh isi file **`schedule.html`** lu dengan kode terbaru ini:
+
+```html
 <!DOCTYPE html>
 <html lang="id">
 <head>
@@ -33,7 +40,6 @@
         }
         h2 { text-align: center; color: #222; margin-top: 0; }
         
-        /* Grid untuk tombol tanggal (4 hari: 26 s.d. 29) */
         .grid-container { 
             display: grid; 
             grid-template-columns: 1fr 1fr; 
@@ -51,11 +57,8 @@
             box-shadow: 2px 2px 5px rgba(0,0,0,0.2); 
             transition: background-color 0.2s;
         }
-        .date-btn:hover {
-            background-color: #f0f0f0;
-        }
+        .date-btn:hover { background-color: #f0f0f0; }
         
-        /* Tombol navigasi */
         .nav-btn { 
             background-color: #333; 
             color: white; 
@@ -70,15 +73,13 @@
         }
         .home-btn { margin-top: 20px; background-color: #6c757d; }
 
-        /* Area list jadwal yang bisa di-scroll jika panjang */
         .schedule-scroll {
             overflow-y: auto;
             flex-grow: 1;
-            margin-top: 10px;
+            margin-top: 5px;
             padding-right: 5px;
         }
 
-        /* List jadwal */
         .timeline { list-style: none; padding: 0; margin: 0; }
         .timeline li { 
             display: flex; 
@@ -86,19 +87,43 @@
             margin-bottom: 12px; 
             border-bottom: 1px solid #ddd; 
             padding-bottom: 8px; 
+            transition: background-color 0.3s;
+            padding-left: 5px;
+            border-radius: 4px;
         }
+        
+        /* Efek sorot untuk kegiatan yang sedang berlangsung */
+        .timeline li.active-row {
+            background-color: #fff3cd;
+            border-left: 4px solid #ffc107;
+            border-bottom: 1px solid #ffeeba;
+        }
+
         .time { font-weight: bold; color: #0056b3; font-size: 13px; margin-bottom: 2px; }
         .activity { color: #333; font-size: 14px; }
         
-        /* Gaya untuk jam realtime */
         .clock {
             text-align: center;
             font-size: 24px;
             font-weight: bold;
             color: #d9534f;
             margin-top: 5px;
-            margin-bottom: 10px;
+            margin-bottom: 8px;
             font-family: 'Courier New', Courier, monospace;
+            flex-shrink: 0;
+        }
+
+        /* Kotak Keterangan Live Status di bawah jam */
+        .live-status {
+            background-color: #e8f4fd;
+            border: 2px dashed #0056b3;
+            border-radius: 8px;
+            padding: 8px 10px;
+            text-align: center;
+            margin-bottom: 12px;
+            font-size: 13px;
+            color: #0056b3;
+            font-weight: bold;
             flex-shrink: 0;
         }
     </style>
@@ -123,8 +148,11 @@
         
         <h2 id="title-date" style="margin-bottom: 5px;"></h2>
         
-        <!-- Wadah Jam Realtime -->
+        <!-- Jam Realtime -->
         <div class="clock" id="realtime-clock">00:00:00</div>
+        
+        <!-- Kotak Keterangan Status Otomatis -->
+        <div class="live-status" id="live-status-box">Memuat status kegiatan...</div>
         
         <div class="schedule-scroll">
             <ul class="timeline" id="schedule-list"></ul>
@@ -136,84 +164,96 @@
             26: {
                 date: "26-September-2026",
                 events: [
+                    { time: "04:00 - 05:00", act: "PREPARE" },
                     { time: "05:00 - 06:00", act: "OTW STASIUN SENEN" },
-                    { time: "07:55 - 15:50", act: "OTW TANGERANG - JOGJA" },
-                    { time: "15:50 - 16:50", act: "OTW KE VILLA" },
-                    { time: "16:50 - 17:00", act: "CHECK IN DI VILLA" },
-                    { time: "17:00 - 17:40", act: "RENTAL MOTOR ( COD DI VILLA )" },
-                    { time: "17:40 - 18:10", act: "ISTIRAHAT DI VILLA ( MANDI )" },
-                    { time: "18:10 - 19:00", act: "MAKAN MALAM" },
-                    { time: "19:00 - 07:00", act: "ISTIRAHAT BOBO DI VILLA" }
+                    { time: "06:00 - 07:55", act: "TUKER TIKET" },
+                    { time: "07:55 - 15:50", act: "STASIUN SENEN - STASIUN LEMPUYANGAN" },
+                    { time: "15:50 - 16:20", act: "COD MOTOR (DEPAN STASIUN)" },
+                    { time: "16:30 - 17:10", act: "OTW VILLA" },
+                    { time: "17:10 - 18:30", act: "CHECK IN & ISTIRAHAT" },
+                    { time: "18:30 - 18:45", act: "OTW KOPI KLOTOK" },
+                    { time: "18:45 - 20:20", act: "MAKAN & NGOPI DI KOPI KLOTOK" },
+                    { time: "20:20 - 20:35", act: "OTW VILLA (MAMPIR KE INDOMARET)" },
+                    { time: "20:35 - 06:00", act: "ISTIRAHAT" }
                 ]
             },
             27: {
                 date: "27-September-2026",
                 events: [
-                    { time: "07:00 - 08:00", act: "MANDI DI VILLA" },
-                    { time: "08:00 - 09:00", act: "SARAPAN DEKAT VILLA" },
-                    { time: "09:00 - 09:30", act: "OTW CANDI PRAMBANAN" },
-                    { time: "09:30 - 11:00", act: "CANDI PRAMBANAN" },
-                    { time: "11:00 - 11:40", act: "MAKAN SIANG DEKET PRAMBANAN" },
-                    { time: "11:40 - 12:20", act: "OTW KEDATHON JOGJA" },
-                    { time: "12:20 - 13:20", act: "KEDATHON JOGJA" },
-                    { time: "13:20 - 14:20", act: "TAMAN SARI" },
-                    { time: "14:20 - 14:30", act: "OTW MUSEUM VREDEBURG" },
-                    { time: "14:30 - 16:00", act: "MUSEUM VREDEBURG" },
-                    { time: "16:00 - 16:15", act: "OTW TUGU JOGJA" },
-                    { time: "16:15 - 17:00", act: "CAFFE TUGU JOGJA" },
-                    { time: "17:00 - 17:20", act: "OTW MALIOBORO" },
-                    { time: "17:20 - 18:00", act: "MALIOBORO" },
-                    { time: "18:00 - 20:00", act: "MAKAN MALAM, KULINER MALIOBORO" },
-                    { time: "20:00 - 20:30", act: "OTW VILLA" },
-                    { time: "20:30 - 21:00", act: "MANDI DI VILLA" },
-                    { time: "21:00 - 07:00", act: "ISTIRAHAT BOBO DI VILLA" }
+                    { time: "06:00 - 06:20", act: "MASAK UNTUK SARAPAN" },
+                    { time: "06:20 - 07:00", act: "SARAPAN & MANDI" },
+                    { time: "07:00 - 07:40", act: "OTW CANDI PRAMBANAN" },
+                    { time: "07:40 - 11:30", act: "EKSPLOR PRAMBANAN" },
+                    { time: "11:30 - 12:00", act: "OTW GUDEG BU JUM" },
+                    { time: "12:00 - 12:50", act: "MAKAN SIANG GUDEG BU JUM" },
+                    { time: "12:50 - 13:15", act: "OTW PASAR NGASEM" },
+                    { time: "13:15 - 13:40", act: "KULINERAN DI PASAR NGASEM" },
+                    { time: "13:40 - 13:50", act: "OTW KERATON JOGJA" },
+                    { time: "13:50 - 14:40", act: "EKSPLOR KERATON JOGJA" },
+                    { time: "14:40 - 14:45", act: "OTW TAMAN SARI" },
+                    { time: "14:45 - 15:20", act: "EKSPLORE TAMAN SARI" },
+                    { time: "15:20 - 15:30", act: "OTW MUSEUM SENOBUDOYO" },
+                    { time: "15:30 - 15:40", act: "OTW BENTENG VREDEBURG" },
+                    { time: "15:40 - 16:20", act: "EKSPLORE BENTENG VREDEBURG" },
+                    { time: "16:20 - 17:40", act: "OTW TUGU JOGJA" },
+                    { time: "17:40 - 18:10", act: "MAKAN MALAM DI TUGU JOGJA" },
+                    { time: "18:10 - 18:20", act: "OTW MALIOBORO" },
+                    { time: "18:20 - 20:30", act: "EKSPLORE MALIOBORO" },
+                    { time: "20:30 - 21:10", act: "OTW VILLA" },
+                    { time: "21:10 - 06:00", act: "ISTIRAHAT" }
                 ]
             },
             28: {
                 date: "28-September-2026",
                 events: [
-                    { time: "07:00 - 08:00", act: "MANDI DI VILLA" },
-                    { time: "08:00 - 08:40", act: "SARAPAN DEKAT VILLA" },
-                    { time: "08:40 - 09:10", act: "OTW MALIOBORO" },
-                    { time: "09:10 - 09:30", act: "PRIPER FOTO SHOOT" },
-                    { time: "09:30 - 10:30", act: "FOTO SHOOT (MALIOBORO)" },
-                    { time: "10:30 - 10:50", act: "SELESAI FOTO SHOOT" },
-                    { time: "10:50 - 11:50", act: "CARI MAKAN DEKET MALIOBORO" },
-                    { time: "11:50 - 13:00", act: "CARI OLEH-OLEH" },
-                    { time: "13:00 - 15:30", act: "KULINERAN DI MALIOBORO" },
-                    { time: "15:30 - 17:00", act: "PASAR NGASEM / PASAR BERINGHARJO" },
-                    { time: "17:00 - 18:00", act: "REFRESHING JALAN JALAN SANTAI" },
-                    { time: "18:00 - 19:00", act: "MAKAN MALAM" },
-                    { time: "19:00 - 20:00", act: "MALIOBORO / ALUN ALUN JOGJA" },
-                    { time: "20:00 - 20:30", act: "OTW VILLA" },
-                    { time: "20:30 - 07:00", act: "ISTIRAHAT BOBO DI VILLA" }
+                    { time: "06:00 - 07:30", act: "SARAPAN & MANDI" },
+                    { time: "07:30 - 08:00", act: "OTW MALIOBORO" },
+                    { time: "08:00 - 09:00", act: "PREPARE FOTO SHOOT" },
+                    { time: "09:00 - 10:30", act: "FOTO PREWEDDING" },
+                    { time: "10:30 - 10:50", act: "OTW PASAR BERINGHARJO" },
+                    { time: "10:50 - 11:40", act: "MAKAN SIANG + BELI OLEH-OLEH DI PASAR BERINGHARJO" },
+                    { time: "11:40 - 12:30", act: "OTW HUTAN PINUS" },
+                    { time: "12:30 - 14:00", act: "NYANTAI DI HUTAN PINUS" },
+                    { time: "14:00 - 15:30", act: "OTW IRBABO PARK" },
+                    { time: "15:30 - 18:00", act: "WISATA IRBABO PARK" },
+                    { time: "18:00 - 18:30", act: "OTW GASOTANG" },
+                    { time: "18:30 - 19:30", act: "MAKAN MALAM GASOTANG" },
+                    { time: "19:30 - 20:00", act: "OTW VILLA" },
+                    { time: "20:00 - 21:00", act: "MANDI - PACKING" },
+                    { time: "21:00 - 07:00", act: "ISTIRAHAT" }
                 ]
             },
             29: {
                 date: "29-September-2026",
                 events: [
-                    { time: "07:00 - 08:00", act: "MANDI DI VILLA" },
-                    { time: "08:00 - 09:00", act: "MAKAN DI VILLA" },
-                    { time: "09:00 - 11:00", act: "PRIPER CHECK OUT VILLA" },
-                    { time: "11:00 - 11:10", act: "CEK OUT VILLA" },
-                    { time: "11:00 - 11:10", act: "OTW STASIUN JOGJA" },
-                    { time: "11:10 - 12:20", act: "OTW JOGJA - KLATEN" },
-                    { time: "12:20 - 12:40", act: "OTW RUMAH MBAH" },
-                    { time: "12:40 - 13:20", act: "MAKAN - NGOBROL DIRUMAH MBAH" },
-                    { time: "13:20 - 15:00", act: "JALAN-JALAN DI KLATEN" },
-                    { time: "15:00 - 16:00", act: "PRIPER PULANG" },
-                    { time: "16:00 - 16:20", act: "OTW KE DELANGGU" },
-                    { time: "16:20 - 07:00", act: "OTW KLATEN - TANGERANG" }
+                    { time: "07:00 - 07:30", act: "MANDI" },
+                    { time: "07:30 - 08:30", act: "CHECK BARANG MASUK KOPER" },
+                    { time: "08:30 - 09:30", act: "PRIPARE" },
+                    { time: "09:30 - 09:40", act: "CHECK OUT VILLA" },
+                    { time: "09:40 - 10:10", act: "OTW ST LEMPUYANGAN" },
+                    { time: "10:10 - 10:30", act: "BALIKIN MOTOR" },
+                    { time: "10:30 - 11:30", act: "OTW KLATEN" },
+                    { time: "11:30 - 11:50", act: "OTW RUMAH MBAH" },
+                    { time: "11:50 - 13:00", act: "ISTIRAHAT DI RUMAH MBAH" },
+                    { time: "13:00 - 16:30", act: "JALAN JALAN - MAKAN SIANG" },
+                    { time: "16:30 - 17:00", act: "OTW RUMAH MBAH" },
+                    { time: "17:00 - 17:30", act: "PRIPARE PULANG" },
+                    { time: "17:30 - 17:50", act: "OTW DELANGGU" },
+                    { time: "17:50 - 18:50", act: "NUNGGU BIS" },
+                    { time: "18:50 - 03:00", act: "OTW TERMINAL PORIS PLAWAD" },
+                    { time: "03:00 - 03:30", act: "OTW RUMAH" }
                 ]
             }
         };
 
+        let activeDateKey = null;
+
         function showSchedule(dateKey) {
+            activeDateKey = dateKey;
             document.getElementById('view-dates').style.display = 'none';
             document.getElementById('view-schedule').style.display = 'flex';
 
             const data = scheduleData[dateKey];
-            
             document.getElementById('title-date').innerText = data.date;
 
             const listElement = document.getElementById('schedule-list');
@@ -224,11 +264,19 @@
                 li.innerHTML = `<span class="time">${item.time}</span> <span class="activity">${item.act}</span>`;
                 listElement.appendChild(li);
             });
+
+            updateClock(); // Langsung update status saat dibuka
         }
 
         function showDates() {
+            activeDateKey = null;
             document.getElementById('view-dates').style.display = 'flex';
             document.getElementById('view-schedule').style.display = 'none';
+        }
+
+        function timeToMinutes(timeStr) {
+            const parts = timeStr.trim().split(':');
+            return parseInt(parts[0]) * 60 + parseInt(parts[1]);
         }
 
         function updateClock() {
@@ -238,6 +286,41 @@
             const seconds = String(now.getSeconds()).padStart(2, '0');
             
             document.getElementById('realtime-clock').innerText = `${hours}:${minutes}:${seconds}`;
+
+            // Cek status kegiatan jika sedang membuka halaman detail jadwal
+            if (activeDateKey && scheduleData[activeDateKey]) {
+                const currentTotalMin = now.getHours() * 60 + now.getMinutes();
+                const events = scheduleData[activeDateKey].events;
+                
+                let activeEventText = "☕ Waktunya santai / Diluar jadwal utama";
+                
+                // Reset semua highlight baris
+                const listItems = document.querySelectorAll('#schedule-list li');
+                listItems.forEach(li => li.classList.remove('active-row'));
+
+                events.forEach((item, idx) => {
+                    const [startStr, endStr] = item.time.split('-');
+                    const startMin = timeToMinutes(startStr);
+                    const endMin = timeToMinutes(endStr);
+
+                    let inRange = false;
+                    // Handle rentang waktu normal vs melewati tengah malam (overnight)
+                    if (startMin <= endMin) {
+                        inRange = currentTotalMin >= startMin && currentTotalMin <= endMin;
+                    } else {
+                        inRange = currentTotalMin >= startMin || currentTotalMin <= endMin;
+                    }
+
+                    if (inRange) {
+                        activeEventText = `⚡ SEDANG BERLANGSUNG:<br><span style="font-size:14px; color:#222;">${item.act}</span>`;
+                        if (listItems[idx]) {
+                            listItems[idx].classList.add('active-row');
+                        }
+                    }
+                });
+
+                document.getElementById('live-status-box').innerHTML = activeEventText;
+            }
         }
 
         setInterval(updateClock, 1000);
@@ -245,3 +328,5 @@
     </script>
 </body>
 </html>
+
+```
